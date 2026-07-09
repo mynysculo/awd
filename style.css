@@ -10,8 +10,8 @@
   --amber-dark: #4a2800;
   --font-tech: 'Share Tech Mono', monospace;
   --font-body: 'Inter', sans-serif;
-  --glow-green: 0 0 12px rgba(0, 255, 65, 0.5);
-  --glow-amber: 0 0 12px rgba(255, 140, 0, 0.5);
+  --glow-green: 0 0 15px rgba(0, 255, 65, 0.5);
+  --glow-amber: 0 0 15px rgba(255, 140, 0, 0.5);
 }
 
 *, *::before, *::after {
@@ -82,6 +82,7 @@ body {
   font-size: 3.5rem;
   color: var(--amber);
   text-shadow: var(--glow-amber);
+  font-weight: 800;
 }
 
 .logo-text {
