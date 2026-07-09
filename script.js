@@ -11,38 +11,40 @@ document.addEventListener('DOMContentLoaded', () => {
 /* ========== RELÓGIO ========== */
 function initClock() {
   const clock = document.getElementById('live-clock');
-  setInterval(() => {
-    const d = new Date();
-    clock.textContent = d.toLocaleTimeString('pt-BR', { hour12: false });
-  }, 1000);
+  function update() {
+    const now = new Date();
+    clock.textContent = now.toLocaleTimeString('pt-BR', { hour12: false });
+    requestAnimationFrame(() => setTimeout(update, 1000));
+  }
+  update();
 }
 
 /* ========== MAPA INTERATIVO ========== */
 function initMap() {
   const zones = document.querySelectorAll('.map-zone, .map-dot');
-  const panelBody = document.getElementById('holo-body');
-  const panelCoords = document.getElementById('holo-coords');
+  const holoBody = document.getElementById('holo-body');
+  const holoCoords = document.getElementById('holo-coords');
   const listButtons = document.querySelectorAll('.quick-command-list button');
 
   const data = {
-    CMN: { sigla:'CMN', nome:'Comando Militar do Norte', sede:'Belém (PA)', abrang:'Defesa da Amazônia Oriental' },
-    CMA: { sigla:'CMA', nome:'Comando Militar da Amazônia', sede:'Manaus (AM)', abrang:'Faixa de fronteira amazônica' },
-    CMNE:{ sigla:'CMNE', nome:'Comando Militar do Nordeste', sede:'Recife (PE)', abrang:'Segurança regional e apoio a GLO' },
-    CMP: { sigla:'CMP', nome:'Comando Militar do Planalto', sede:'Brasília (DF)', abrang:'Proteção da capital e entorno' },
-    CML: { sigla:'CML', nome:'Comando Militar do Leste', sede:'Rio de Janeiro (RJ)', abrang:'Centro de poder e F Emp Estrtg' },
-    CMSE:{ sigla:'CMSE', nome:'Comando Militar do Sudeste', sede:'São Paulo (SP)', abrang:'Maior efetivo e estrutura industrial' },
-    CMS: { sigla:'CMS', nome:'Comando Militar do Sul', sede:'Porto Alegre (RS)', abrang:'Fronteira sul e tradição blindada' },
-    CMO: { sigla:'CMO', nome:'Comando Militar do Oeste', sede:'Campo Grande (MS)', abrang:'Pantanal e defesa da fronteira oeste' }
+    CMN:  { sigla:'CMN',  nome:'Comando Militar do Norte',     sede:'Belém (PA)',        abrang:'Defesa da Amazônia Oriental' },
+    CMA:  { sigla:'CMA',  nome:'Comando Militar da Amazônia',  sede:'Manaus (AM)',       abrang:'Faixa de fronteira amazônica' },
+    CMNE: { sigla:'CMNE', nome:'Comando Militar do Nordeste',  sede:'Recife (PE)',       abrang:'Segurança regional e apoio a GLO' },
+    CMP:  { sigla:'CMP',  nome:'Comando Militar do Planalto',  sede:'Brasília (DF)',     abrang:'Proteção da capital e entorno' },
+    CML:  { sigla:'CML',  nome:'Comando Militar do Leste',     sede:'Rio de Janeiro (RJ)', abrang:'Centro de poder e F Emp Estrtg' },
+    CMSE: { sigla:'CMSE', nome:'Comando Militar do Sudeste',   sede:'São Paulo (SP)',    abrang:'Maior efetivo e estrutura industrial' },
+    CMS:  { sigla:'CMS',  nome:'Comando Militar do Sul',       sede:'Porto Alegre (RS)', abrang:'Fronteira sul e tradição blindada' },
+    CMO:  { sigla:'CMO',  nome:'Comando Militar do Oeste',     sede:'Campo Grande (MS)', abrang:'Pantanal e defesa da fronteira oeste' }
   };
 
   function showInfo(comando) {
     const d = data[comando];
     if (!d) return;
-    panelBody.innerHTML = `<p><strong>${d.sigla}</strong> · ${d.nome}</p><p>Sede: ${d.sede}</p><p>${d.abrang}</p>`;
-    panelCoords.textContent = `COORD: ${comando}`;
-    listButtons.forEach(b => {
-      b.classList.remove('active');
-      if (b.dataset.comando === comando) b.classList.add('active');
+    holoBody.innerHTML = `<p><strong>${d.sigla}</strong> · ${d.nome}</p><p>Sede: ${d.sede}</p><p>${d.abrang}</p>`;
+    holoCoords.textContent = `COORD: ${comando}`;
+    listButtons.forEach(btn => {
+      btn.classList.remove('active');
+      if (btn.dataset.comando === comando) btn.classList.add('active');
     });
   }
 
@@ -66,16 +68,20 @@ function initTabs() {
     highlighter.style.width = btn.offsetWidth + 'px';
   }
 
-  const active = document.querySelector('.tab-btn.active');
-  if (active) moveHighlighter(active);
+  const activeBtn = document.querySelector('.tab-btn.active');
+  if (activeBtn) moveHighlighter(activeBtn);
 
   buttons.forEach(btn => {
     btn.addEventListener('click', () => {
+      if (btn.classList.contains('active')) return;
       buttons.forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       moveHighlighter(btn);
-      panels.forEach(p => p.classList.remove('active'));
-      document.getElementById('panel-' + btn.dataset.tab).classList.add('active');
+      const targetId = 'panel-' + btn.dataset.tab;
+      panels.forEach(p => {
+        p.classList.remove('active');
+        if (p.id === targetId) p.classList.add('active');
+      });
     });
   });
 
@@ -85,31 +91,45 @@ function initTabs() {
   });
 }
 
-/* ========== TIMELINE SCANNER ========== */
+/* ========== LINHA DO TEMPO ========== */
 function initTimeline() {
-  const entries = document.querySelectorAll('.timeline-entry[data-animate]');
-  const observer = new IntersectionObserver((entriesObs) => {
-    entriesObs.forEach(e => {
-      if (e.isIntersecting) e.target.classList.add('visible');
+  const items = document.querySelectorAll('.timeline-entry[data-animate]');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
     });
   }, { threshold: 0.3 });
-  entries.forEach(e => observer.observe(e));
+  items.forEach(item => observer.observe(item));
 }
 
-/* ========== GALERIA ========== */
+/* ========== GALERIA COM IMAGENS REAIS ========== */
 function initGallery() {
   const grid = document.getElementById('gallery-grid');
   const overlay = document.getElementById('lightbox-overlay');
   const imgEl = document.getElementById('lightbox-img');
   const caption = document.getElementById('lightbox-caption');
-  const close = document.getElementById('lightbox-close');
+  const closeBtn = document.getElementById('lightbox-close');
 
-  // Imagens reais (domínio público ou divulgação oficial)
+  // Imagens reais de domínio público ou divulgação oficial do Exército Brasileiro
   const images = [
-    { src:'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Exercito_brasileiro_paraquedista.jpg/640px-Exercito_brasileiro_paraquedista.jpg', caption:'Paraquedistas do Exército Brasileiro' },
-    { src:'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Brazilian_Army_Aviation_Command_Helicopter.jpg/640px-Brazilian_Army_Aviation_Command_Helicopter.jpg', caption:'Helicóptero do Comando de Aviação do Exército' },
-    { src:'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Brazilian_special_forces_operators.jpg/640px-Brazilian_special_forces_operators.jpg', caption:'Operadores das Forças Especiais' },
-    { src:'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/MINUSTAH_Brazilian_troops.jpg/640px-MINUSTAH_Brazilian_troops.jpg', caption:'Tropas brasileiras na MINUSTAH (Haiti)' }
+    {
+      src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Exercito_brasileiro_paraquedista.jpg/640px-Exercito_brasileiro_paraquedista.jpg',
+      caption: 'Paraquedistas do Exército Brasileiro'
+    },
+    {
+      src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Brazilian_Army_Aviation_Command_Helicopter.jpg/640px-Brazilian_Army_Aviation_Command_Helicopter.jpg',
+      caption: 'Helicóptero do Comando de Aviação do Exército'
+    },
+    {
+      src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Brazilian_special_forces_operators.jpg/640px-Brazilian_special_forces_operators.jpg',
+      caption: 'Operadores das Forças Especiais do Exército'
+    },
+    {
+      src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/MINUSTAH_Brazilian_troops.jpg/640px-MINUSTAH_Brazilian_troops.jpg',
+      caption: 'Tropas brasileiras na MINUSTAH (Haiti)'
+    }
   ];
 
   images.forEach(img => {
@@ -124,23 +144,27 @@ function initGallery() {
     grid.appendChild(div);
   });
 
-  close.addEventListener('click', () => overlay.classList.remove('active'));
+  closeBtn.addEventListener('click', () => overlay.classList.remove('active'));
   overlay.addEventListener('click', (e) => {
     if (e.target === overlay) overlay.classList.remove('active');
   });
 }
 
-/* ========== GLITCH ========== */
+/* ========== GLITCH AUTOMÁTICO ========== */
 function initGlitch() {
   const cards = document.querySelectorAll('.glitch-card[data-glitch]');
+  if (cards.length === 0) return;
+
   setInterval(() => {
-    const random = cards[Math.floor(Math.random() * cards.length)];
-    random.classList.add('glitch-active');
-    setTimeout(() => random.classList.remove('glitch-active'), 350);
+    const randomCard = cards[Math.floor(Math.random() * cards.length)];
+    randomCard.classList.add('glitch-active');
+    setTimeout(() => {
+      randomCard.classList.remove('glitch-active');
+    }, 350);
   }, 5000);
 }
 
-/* ========== CONSOLE TÁTICO ========== */
+/* ========== CONSOLE TÁTICO AO VIVO ========== */
 function initConsole() {
   const output = document.getElementById('console-output');
   const messages = [
@@ -151,30 +175,33 @@ function initConsole() {
     '> C Op Esp: Canal seguro ativo',
     '> PPIF: Varredura de fronteira ok'
   ];
-  let idx = 0, char = 0, current = '';
 
-  function type() {
-    if (char < messages[idx].length) {
-      current += messages[idx][char];
-      output.textContent = current;
-      char++;
-      setTimeout(type, 50);
+  let msgIndex = 0;
+  let charIndex = 0;
+  let currentText = '';
+
+  function typeWriter() {
+    if (charIndex < messages[msgIndex].length) {
+      currentText += messages[msgIndex].charAt(charIndex);
+      output.textContent = currentText;
+      charIndex++;
+      setTimeout(typeWriter, 50);
     } else {
-      setTimeout(erase, 2000);
+      setTimeout(eraseText, 2000);
     }
   }
 
-  function erase() {
-    if (current.length > 0) {
-      current = current.slice(0, -1);
-      output.textContent = current;
-      setTimeout(erase, 20);
+  function eraseText() {
+    if (currentText.length > 0) {
+      currentText = currentText.slice(0, -1);
+      output.textContent = currentText;
+      setTimeout(eraseText, 20);
     } else {
-      idx = (idx + 1) % messages.length;
-      char = 0;
-      setTimeout(type, 300);
+      msgIndex = (msgIndex + 1) % messages.length;
+      charIndex = 0;
+      setTimeout(typeWriter, 300);
     }
   }
 
-  type();
+  typeWriter();
 }
