@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
   <title>F.E. BRASIL | Forças de Emprego Estratégico</title>
-  <!-- Fontes Google -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Inter:opsz,wght@14..32,400;14..32,600;14..32,800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Inter:opsz,wght@14..32,400;14..32,600;14..32,800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <!-- SCANLINES GLOBAIS -->
@@ -18,8 +18,8 @@
   <header id="main-header">
     <div class="header-status-bar">
       <span class="status-tag">SISCOMIS: ATIVO</span>
-      <span class="status-tag">COTER</span>
-      <span class="status-tag" id="live-clock">--:--:--</span>
+      <span class="status-tag">COTER · COMANDO DE OPERAÇÕES TERRESTRES</span>
+      <span class="status-tag" id="live-clock">00:00:00</span>
     </div>
     <div class="header-core">
       <div class="logo-container">
@@ -41,7 +41,7 @@
   </header>
 
   <main>
-    <!-- ===== SEÇÃO COMANDOS MILITARES DE ÁREA (MAPA INTERATIVO) ===== -->
+    <!-- ===== SEÇÃO 1: COMANDOS MILITARES DE ÁREA ===== -->
     <section id="comandos-area" class="section-dark">
       <div class="section-title-wrapper">
         <h2><span class="amber-hash">##</span> COMANDOS MILITARES DE ÁREA</h2>
@@ -54,6 +54,7 @@
           <svg viewBox="0 0 500 500" id="brasil-map-svg" xmlns="http://www.w3.org/2000/svg">
             <!-- Contorno externo do Brasil -->
             <path id="brasil-outline" d="M130,60 L210,35 L280,30 L350,45 L400,70 L430,110 L440,170 L430,230 L445,290 L430,350 L400,390 L340,415 L270,420 L190,395 L130,350 L95,290 L80,230 L75,170 L85,110 Z" fill="none" stroke="#00ff41" stroke-width="2" stroke-opacity="0.5" />
+            
             <!-- Zonas de Comando -->
             <path data-comando="CMN" class="map-zone" d="M195,55 L280,48 L310,85 L280,125 L200,135 L170,90 Z" />
             <path data-comando="CMA" class="map-zone" d="M130,95 L200,135 L190,185 L120,175 L90,125 Z" />
@@ -63,6 +64,7 @@
             <path data-comando="CMSE" class="map-zone" d="M195,255 L255,265 L255,305 L205,325 L165,285 Z" />
             <path data-comando="CMS" class="map-zone" d="M155,315 L215,335 L225,375 L175,395 L125,355 Z" />
             <path data-comando="CMO" class="map-zone" d="M115,215 L185,245 L155,315 L95,295 L75,245 Z" />
+            
             <!-- Pontos de sede -->
             <circle data-comando="CMN" class="map-dot" cx="235" cy="88" r="6" />
             <circle data-comando="CMA" class="map-dot" cx="155" cy="148" r="6" />
@@ -74,6 +76,7 @@
             <circle data-comando="CMO" class="map-dot" cx="135" cy="270" r="6" />
           </svg>
         </div>
+        
         <!-- Painel holográfico de detalhes -->
         <div class="map-info-panel" id="map-info-panel">
           <div class="panel-holographic">
@@ -85,8 +88,9 @@
           </div>
         </div>
       </div>
+      
       <!-- Lista rápida de comandos -->
-      <div class="quick-command-list">
+      <div class="quick-command-list" id="quick-command-list">
         <button data-comando="CMN">CMN · Belém</button>
         <button data-comando="CMA">CMA · Manaus</button>
         <button data-comando="CMNE">CMNE · Recife</button>
@@ -98,7 +102,7 @@
       </div>
     </section>
 
-    <!-- ===== SEÇÃO FORÇAS DE EMPREGO ESTRATÉGICO (ABAS) ===== -->
+    <!-- ===== SEÇÃO 2: FORÇAS DE EMPREGO ESTRATÉGICO (ABAS) ===== -->
     <section id="forcas-emprego" class="section-dark">
       <div class="section-title-wrapper">
         <h2><span class="amber-hash">##</span> NÚCLEO DE PRONTA-RESPOSTA</h2>
@@ -141,6 +145,7 @@
               </div>
             </div>
           </div>
+          
           <!-- Painel Aviação -->
           <div class="tab-panel" id="panel-cavex">
             <div class="force-card">
@@ -162,6 +167,7 @@
               </div>
             </div>
           </div>
+          
           <!-- Painel Operações Especiais -->
           <div class="tab-panel" id="panel-opesp">
             <div class="force-card">
@@ -187,7 +193,7 @@
       </div>
     </section>
 
-    <!-- ===== SEÇÃO FORMAÇÃO E ADESTRAMENTO (LINHA DO TEMPO SCANNER) ===== -->
+    <!-- ===== SEÇÃO 3: FORMAÇÃO E ADESTRAMENTO (LINHA DO TEMPO) ===== -->
     <section id="formacao-adestramento" class="section-dark">
       <div class="section-title-wrapper">
         <h2><span class="amber-hash">##</span> FORMAÇÃO E ADESTRAMENTO</h2>
@@ -196,6 +202,7 @@
 
       <div class="timeline-scanner" id="timeline-scanner">
         <div class="timeline-rail"></div>
+        
         <div class="timeline-entry left" data-animate>
           <div class="timeline-marker"></div>
           <div class="timeline-card">
@@ -204,6 +211,7 @@
             <span>Três Corações (MG)</span>
           </div>
         </div>
+        
         <div class="timeline-entry right" data-animate>
           <div class="timeline-marker"></div>
           <div class="timeline-card">
@@ -212,6 +220,7 @@
             <span>Resende (RJ)</span>
           </div>
         </div>
+        
         <div class="timeline-entry left" data-animate>
           <div class="timeline-marker"></div>
           <div class="timeline-card">
@@ -220,6 +229,7 @@
             <span>Manaus (AM)</span>
           </div>
         </div>
+        
         <div class="timeline-entry right" data-animate>
           <div class="timeline-marker"></div>
           <div class="timeline-card">
@@ -228,6 +238,7 @@
             <span>Rio de Janeiro (RJ)</span>
           </div>
         </div>
+        
         <div class="timeline-entry left" data-animate>
           <div class="timeline-marker"></div>
           <div class="timeline-card">
@@ -239,23 +250,26 @@
       </div>
     </section>
 
-    <!-- ===== SEÇÃO ATUAÇÃO CONTEMPORÂNEA ===== -->
+    <!-- ===== SEÇÃO 4: ATUAÇÃO CONTEMPORÂNEA ===== -->
     <section id="atuacao-contemporanea" class="section-dark">
       <div class="section-title-wrapper">
         <h2><span class="amber-hash">##</span> ATUAÇÃO CONTEMPORÂNEA</h2>
         <div class="title-underline"></div>
       </div>
+      
       <div class="cards-mission-grid">
         <article class="mission-card">
           <div class="card-corner-decoration"></div>
           <h4>GLO</h4>
           <p>Operações de Garantia da Lei e da Ordem em centros urbanos. Intervenção Federal no Rio de Janeiro (2018).</p>
         </article>
+        
         <article class="mission-card">
           <div class="card-corner-decoration"></div>
           <h4>MISSÕES DE PAZ</h4>
           <p>Comando da MINUSTAH no Haiti por mais de 13 anos, com infantaria leve como força predominante.</p>
         </article>
+        
         <article class="mission-card">
           <div class="card-corner-decoration"></div>
           <h4>FAIXA DE FRONTEIRA</h4>
@@ -264,7 +278,7 @@
       </div>
     </section>
 
-    <!-- ===== SEÇÃO ACERVO / GALERIA (IMAGENS REAIS) ===== -->
+    <!-- ===== SEÇÃO 5: ACERVO / GALERIA (IMAGENS REAIS) ===== -->
     <section id="acervo-galeria" class="section-dark">
       <div class="section-title-wrapper">
         <h2><span class="amber-hash">##</span> ACERVO TÁTICO</h2>
@@ -275,6 +289,7 @@
       <div class="gallery-grid" id="gallery-grid">
         <!-- As imagens são carregadas dinamicamente pelo JS -->
       </div>
+      
       <!-- Lightbox -->
       <div class="lightbox-overlay" id="lightbox-overlay">
         <div class="lightbox-content">
@@ -285,28 +300,32 @@
       </div>
     </section>
 
-    <!-- ===== SEÇÃO DESAFIOS ATUAIS (GLITCH) ===== -->
+    <!-- ===== SEÇÃO 6: DESAFIOS ATUAIS (GLITCH) ===== -->
     <section id="desafios-glitch" class="section-dark">
       <div class="section-title-wrapper">
         <h2><span class="amber-hash">##</span> DESAFIOS ATUAIS</h2>
         <div class="title-underline"></div>
       </div>
+      
       <div class="glitch-card-grid" id="glitch-card-grid">
         <div class="glitch-card" data-glitch>
           <span class="glitch-icon">[!]</span>
           <h5>Modernização Tecnológica</h5>
           <p>Sistemas embarcados, rádios definidos por software, guerra centrada em redes.</p>
         </div>
+        
         <div class="glitch-card" data-glitch>
           <span class="glitch-icon">[!]</span>
           <h5>Recursos Humanos</h5>
           <p>Retenção de talentos, revisão do serviço militar obrigatório, profissionalização.</p>
         </div>
+        
         <div class="glitch-card" data-glitch>
           <span class="glitch-icon">[!]</span>
           <h5>Logística Amazônica</h5>
           <p>Manutenção da tropa em ambiente hostil com grandes distâncias e infraestrutura limitada.</p>
         </div>
+        
         <div class="glitch-card" data-glitch>
           <span class="glitch-icon">[!]</span>
           <h5>Integração Interagências</h5>
