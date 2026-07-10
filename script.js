@@ -1,207 +1,132 @@
 document.addEventListener('DOMContentLoaded', () => {
-  initClock();
-  initMap();
-  initTabs();
-  initTimeline();
-  initGallery();
-  initGlitch();
-  initConsole();
-});
-
-/* ========== RELÓGIO ========== */
-function initClock() {
-  const clock = document.getElementById('live-clock');
-  function update() {
-    const now = new Date();
-    clock.textContent = now.toLocaleTimeString('pt-BR', { hour12: false });
-    requestAnimationFrame(() => setTimeout(update, 1000));
-  }
-  update();
-}
-
-/* ========== MAPA INTERATIVO ========== */
-function initMap() {
-  const zones = document.querySelectorAll('.map-zone, .map-dot');
-  const holoBody = document.getElementById('holo-body');
-  const holoCoords = document.getElementById('holo-coords');
-  const listButtons = document.querySelectorAll('.quick-command-list button');
-
-  const data = {
-    CMN:  { sigla:'CMN',  nome:'Comando Militar do Norte',     sede:'Belém (PA)',        abrang:'Defesa da Amazônia Oriental' },
-    CMA:  { sigla:'CMA',  nome:'Comando Militar da Amazônia',  sede:'Manaus (AM)',       abrang:'Faixa de fronteira amazônica' },
-    CMNE: { sigla:'CMNE', nome:'Comando Militar do Nordeste',  sede:'Recife (PE)',       abrang:'Segurança regional e apoio a GLO' },
-    CMP:  { sigla:'CMP',  nome:'Comando Militar do Planalto',  sede:'Brasília (DF)',     abrang:'Proteção da capital e entorno' },
-    CML:  { sigla:'CML',  nome:'Comando Militar do Leste',     sede:'Rio de Janeiro (RJ)', abrang:'Centro de poder e F Emp Estrtg' },
-    CMSE: { sigla:'CMSE', nome:'Comando Militar do Sudeste',   sede:'São Paulo (SP)',    abrang:'Maior efetivo e estrutura industrial' },
-    CMS:  { sigla:'CMS',  nome:'Comando Militar do Sul',       sede:'Porto Alegre (RS)', abrang:'Fronteira sul e tradição blindada' },
-    CMO:  { sigla:'CMO',  nome:'Comando Militar do Oeste',     sede:'Campo Grande (MS)', abrang:'Pantanal e defesa da fronteira oeste' }
-  };
-
-  function showInfo(comando) {
-    const d = data[comando];
-    if (!d) return;
-    holoBody.innerHTML = `<p><strong>${d.sigla}</strong> · ${d.nome}</p><p>Sede: ${d.sede}</p><p>${d.abrang}</p>`;
-    holoCoords.textContent = `COORD: ${comando}`;
-    listButtons.forEach(btn => {
-      btn.classList.remove('active');
-      if (btn.dataset.comando === comando) btn.classList.add('active');
-    });
-  }
-
-  zones.forEach(el => {
-    el.addEventListener('mouseenter', () => showInfo(el.dataset.comando));
-  });
-
-  listButtons.forEach(btn => {
-    btn.addEventListener('click', () => showInfo(btn.dataset.comando));
-  });
-}
-
-/* ========== TABS ========== */
-function initTabs() {
-  const buttons = document.querySelectorAll('.tab-btn');
-  const panels = document.querySelectorAll('.tab-panel');
-  const highlighter = document.getElementById('tab-highlighter');
-
-  function moveHighlighter(btn) {
-    highlighter.style.left = btn.offsetLeft + 'px';
-    highlighter.style.width = btn.offsetWidth + 'px';
-  }
-
-  const activeBtn = document.querySelector('.tab-btn.active');
-  if (activeBtn) moveHighlighter(activeBtn);
-
-  buttons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      if (btn.classList.contains('active')) return;
-      buttons.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      moveHighlighter(btn);
-      const targetId = 'panel-' + btn.dataset.tab;
-      panels.forEach(p => {
-        p.classList.remove('active');
-        if (p.id === targetId) p.classList.add('active');
-      });
+  // --- Navegação principal por abas ---
+  const navLinks = document.querySelectorAll('.nav-link');
+  const tabPanes = document.querySelectorAll('.tab-pane');
+  navLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const target = link.getAttribute('data-tab-target');
+      navLinks.forEach(l => l.classList.remove('active'));
+      link.classList.add('active');
+      tabPanes.forEach(pane => pane.classList.remove('active'));
+      document.getElementById(`tab-${target}`).classList.add('active');
     });
   });
 
-  window.addEventListener('resize', () => {
-    const current = document.querySelector('.tab-btn.active');
-    if (current) moveHighlighter(current);
+  // --- Abas internas Forças Estratégicas com scanline ---
+  const feTabs = document.querySelectorAll('.estrategica-tab');
+  const fePanels = document.querySelectorAll('.fe-panel');
+  feTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      feTabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      const target = tab.getAttribute('data-fe-target');
+      fePanels.forEach(p => p.classList.remove('active'));
+      document.getElementById(`fe-${target}`).classList.add('active');
+      // Simula scanline no glitch overlay
+      const overlay = document.getElementById('glitch-overlay');
+      overlay.style.opacity = '0.3';
+      setTimeout(() => { overlay.style.opacity = '0'; }, 150);
+    });
   });
-}
 
-/* ========== LINHA DO TEMPO ========== */
-function initTimeline() {
-  const items = document.querySelectorAll('.timeline-entry[data-animate]');
+  // --- Mapa Interativo com tooltip holográfico ---
+  const mapAreas = document.querySelectorAll('.map-area');
+  const tooltip = document.getElementById('map-tooltip');
+  mapAreas.forEach(area => {
+    area.addEventListener('mouseenter', (e) => {
+      const info = area.getAttribute('data-info').split('|');
+      tooltip.innerHTML = `<strong>${info[0]}</strong><br>${info[1]}<br>${info[2]}`;
+      tooltip.style.opacity = '1';
+    });
+    area.addEventListener('mousemove', (e) => {
+      tooltip.style.left = (e.pageX + 15) + 'px';
+      tooltip.style.top = (e.pageY + 15) + 'px';
+    });
+    area.addEventListener('mouseleave', () => {
+      tooltip.style.opacity = '0';
+    });
+  });
+
+  // --- Timeline Scanner (Intersection Observer) ---
+  const timelineItems = document.querySelectorAll('.timeline-item');
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
+        entry.target.classList.add('reveal');
       }
     });
-  }, { threshold: 0.3 });
-  items.forEach(item => observer.observe(item));
-}
+  }, { threshold: 0.2 });
+  timelineItems.forEach(item => observer.observe(item));
 
-/* ========== GALERIA COM IMAGENS REAIS ========== */
-function initGallery() {
-  const grid = document.getElementById('gallery-grid');
-  const overlay = document.getElementById('lightbox-overlay');
-  const imgEl = document.getElementById('lightbox-img');
-  const caption = document.getElementById('lightbox-caption');
-  const closeBtn = document.getElementById('lightbox-close');
-
-  // Imagens reais de domínio público ou divulgação oficial do Exército Brasileiro
-  const images = [
-    {
-      src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Exercito_brasileiro_paraquedista.jpg/640px-Exercito_brasileiro_paraquedista.jpg',
-      caption: 'Paraquedistas do Exército Brasileiro'
-    },
-    {
-      src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Brazilian_Army_Aviation_Command_Helicopter.jpg/640px-Brazilian_Army_Aviation_Command_Helicopter.jpg',
-      caption: 'Helicóptero do Comando de Aviação do Exército'
-    },
-    {
-      src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Brazilian_special_forces_operators.jpg/640px-Brazilian_special_forces_operators.jpg',
-      caption: 'Operadores das Forças Especiais do Exército'
-    },
-    {
-      src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/MINUSTAH_Brazilian_troops.jpg/640px-MINUSTAH_Brazilian_troops.jpg',
-      caption: 'Tropas brasileiras na MINUSTAH (Haiti)'
-    }
-  ];
-
-  images.forEach(img => {
-    const div = document.createElement('div');
-    div.className = 'gallery-item';
-    div.innerHTML = `<img src="${img.src}" alt="${img.caption}" loading="lazy" />`;
-    div.addEventListener('click', () => {
-      imgEl.src = img.src;
-      caption.textContent = img.caption;
-      overlay.classList.add('active');
+  // --- Galeria: arrastar para virar (arraste horizontal) ---
+  const galleryCards = document.querySelectorAll('.gallery-card');
+  galleryCards.forEach(card => {
+    let startX = 0;
+    card.addEventListener('mousedown', (e) => {
+      startX = e.clientX;
+      card.style.cursor = 'grabbing';
     });
-    grid.appendChild(div);
+    card.addEventListener('mouseup', (e) => {
+      const diff = e.clientX - startX;
+      if (Math.abs(diff) > 40) {
+        card.classList.toggle('flipped');
+      }
+      card.style.cursor = 'grab';
+    });
+    card.addEventListener('mouseleave', () => {
+      card.style.cursor = 'grab';
+    });
+    // Suporte touch
+    card.addEventListener('touchstart', (e) => {
+      startX = e.touches[0].clientX;
+    });
+    card.addEventListener('touchend', (e) => {
+      const diff = e.changedTouches[0].clientX - startX;
+      if (Math.abs(diff) > 30) {
+        card.classList.toggle('flipped');
+      }
+    });
   });
 
-  closeBtn.addEventListener('click', () => overlay.classList.remove('active'));
-  overlay.addEventListener('click', (e) => {
-    if (e.target === overlay) overlay.classList.remove('active');
-  });
-}
-
-/* ========== GLITCH AUTOMÁTICO ========== */
-function initGlitch() {
-  const cards = document.querySelectorAll('.glitch-card[data-glitch]');
-  if (cards.length === 0) return;
-
+  // --- Glitch automático nos desafios a cada 5s ---
+  const desafioCards = document.querySelectorAll('.desafio-card');
   setInterval(() => {
-    const randomCard = cards[Math.floor(Math.random() * cards.length)];
-    randomCard.classList.add('glitch-active');
-    setTimeout(() => {
-      randomCard.classList.remove('glitch-active');
-    }, 350);
+    desafioCards.forEach(card => {
+      card.classList.add('glitch-effect');
+      setTimeout(() => card.classList.remove('glitch-effect'), 300);
+    });
   }, 5000);
-}
 
-/* ========== CONSOLE TÁTICO AO VIVO ========== */
-function initConsole() {
-  const output = document.getElementById('console-output');
+  // --- Console de Status ao Vivo com digitação ---
+  const consoleOutput = document.getElementById('console-text');
   const messages = [
     '> SISCOMIS: Link Verde...',
-    '> Bda Inf Pqdt: Prontidão 48h',
+    '> Bda Inf Pqdt: Prontidão 48h...',
     '> Conexão com CIGS: Estável',
-    '> CAvEx: Pronto para missão',
-    '> C Op Esp: Canal seguro ativo',
-    '> PPIF: Varredura de fronteira ok'
+    '> CAvEx: Alerta 3 - Mobilidade',
+    '> 1º BFEsp: Sincronizado',
+    '> PPIF: Monitorando fronteira',
+    '> MINUSTAH: Dados históricos'
   ];
-
   let msgIndex = 0;
   let charIndex = 0;
-  let currentText = '';
-
   function typeWriter() {
     if (charIndex < messages[msgIndex].length) {
-      currentText += messages[msgIndex].charAt(charIndex);
-      output.textContent = currentText;
+      consoleOutput.textContent += messages[msgIndex].charAt(charIndex);
       charIndex++;
       setTimeout(typeWriter, 50);
     } else {
-      setTimeout(eraseText, 2000);
+      setTimeout(() => {
+        consoleOutput.textContent = '';
+        charIndex = 0;
+        msgIndex = (msgIndex + 1) % messages.length;
+        typeWriter();
+      }, 2500);
     }
   }
-
-  function eraseText() {
-    if (currentText.length > 0) {
-      currentText = currentText.slice(0, -1);
-      output.textContent = currentText;
-      setTimeout(eraseText, 20);
-    } else {
-      msgIndex = (msgIndex + 1) % messages.length;
-      charIndex = 0;
-      setTimeout(typeWriter, 300);
-    }
-  }
-
   typeWriter();
-}
+
+  // Inicializa primeira aba visível
+  document.querySelector('.nav-link.active').click();
+});
