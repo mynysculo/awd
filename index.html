@@ -1,280 +1,353 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Centro de Comando - Forças de Emprego Estratégico</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>F.E. BRASIL | Forças de Emprego Estratégico</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Inter:opsz,wght@14..32,400;14..32,600;14..32,800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Efeito Geral de Linhas de Varredura de Radar -->
-    <div class="radar-scanline"></div>
-    <div class="overlay-noise"></div>
+  <!-- SCANLINES GLOBAIS -->
+  <div class="global-scanlines"></div>
 
-    <header class="tactical-header">
-        <div class="header-limiter">
-            <div class="glitch-title" data-text="SISTEMA DE DEFESA NACIONAL">SISTEMA DE DEFESA NACIONAL</div>
-            <h1 class="main-title">Militarismo e Infantaria no Brasil: Forças de Emprego Estratégico</h1>
-            <div class="system-status">
-                <span class="status-indicator-dot"></span>
-                <span class="status-text">REDE CRIPTOGRAFADA // OPERACIONAL</span>
-            </div>
-        </div>
-        <div class="border-deco-line"></div>
-    </header>
-
-    <main class="tactical-container">
-        <!-- SEÇÃO 1: MAPA TÁTICO INTERATIVO -->
-        <section class="tactical-section" id="secao-mapa">
-            <h2 class="section-title"><span class="accent-color">></span> COMANDOS MILITARES DE ÁREA</h2>
-            <p class="section-desc">Passe o cursor sobre os vetores do mapa estratégico para interceptar os dados de cada comando regional.</p>
-            
-            <div class="map-grid-container">
-                <div class="map-wrapper">
-                    <!-- Grid de coordenadas simulado ao fundo -->
-                    <div class="coordinate-grid"></div>
-                    <!-- Crosshairs táticos -->
-                    <div class="crosshair ch-tl">+</div>
-                    <div class="crosshair ch-tr">+</div>
-                    <div class="crosshair ch-bl">+</div>
-                    <div class="crosshair ch-br">+</div>
-                    
-                    <!-- SVG Inline - Mapa Abstrato e Geométrico do Brasil -->
-                    <svg viewBox="0 0 600 600" class="brazil-svg-map">
-                        <!-- CMA - Amazônia -->
-                        <polygon points="40,120 220,80 260,240 180,300 40,240" class="map-region" data-comando="CMA" />
-                        <!-- CMN - Norte -->
-                        <polygon points="220,80 420,70 440,180 320,240 260,240" class="map-region" data-comando="CMN" />
-                        <!-- CMNE - Nordeste -->
-                        <polygon points="440,180 560,200 520,340 400,320 320,240" class="map-region" data-comando="CMNE" />
-                        <!-- CMO - Oeste -->
-                        <polygon points="180,300 280,280 310,400 200,450 140,380" class="map-region" data-comando="CMO" />
-                        <!-- CMP - Planalto -->
-                        <polygon points="280,280 400,260 410,360 310,400" class="map-region" data-comando="CMP" />
-                        <!-- CML - Leste -->
-                        <polygon points="410,360 490,350 480,420 390,410" class="map-region" data-comando="CML" />
-                        <!-- CMSE - Sudeste -->
-                        <polygon points="340,410 390,410 380,460 320,450" class="map-region" data-comando="CMSE" />
-                        <!-- CMS - Sul -->
-                        <polygon points="200,450 320,450 340,580 240,580" class="map-region" data-comando="CMS" />
-                    </svg>
-                </div>
-
-                <!-- Painel Lateral Holográfico do Mapa -->
-                <div class="hologram-panel" id="map-panel">
-                    <div class="panel-header">AGUARDANDO SELEÇÃO DE VETOR...</div>
-                    <div class="panel-body">
-                        <div class="data-row"><span class="data-label">COMANDO:</span> <span id="lbl-comando" class="data-value">-</span></div>
-                        <div class="data-row"><span class="data-label">SIGLA:</span> <span id="lbl-sigla" class="data-value">-</span></div>
-                        <div class="data-row"><span class="data-label">SEDE:</span> <span id="lbl-sede" class="data-value">-</span></div>
-                        <div class="data-row"><span class="data-label">DIRETRIZ:</span> <span id="lbl-abrangencia" class="data-value">-</span></div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- SEÇÃO 2: NAVEGAÇÃO POR ABAS (FORÇAS DE EMPREGO ESTRATÉGICO) -->
-        <section class="tactical-section" id="secao-abas">
-            <h2 class="section-title"><span class="accent-color">></span> FORÇAS DE EMPREGO ESTRATÉGICO (F EMP ESTRTG)</h2>
-            <p class="section-desc">Núcleo de pronta-resposta do Exército Brasileiro, subordinadas diretamente ao COTER.</p>
-
-            <div class="tabs-interface">
-                <div class="tabs-navigator" role="tablist">
-                    <button class="tab-trigger active" data-tab="tab-pqdt" role="tab" aria-selected="true">BDA INF PQDT</button>
-                    <button class="tab-trigger" data-tab="tab-cavex" role="tab" aria-selected="false">CAVEX</button>
-                    <button class="tab-trigger" data-tab="tab-copesp" role="tab" aria-selected="false">C OP ESP</button>
-                </div>
-
-                <div class="tabs-content-wrapper">
-                    <!-- Efeito de varredura exclusivo das abas -->
-                    <div class="tab-scanline" id="tab-scanner"></div>
-
-                    <!-- Conteúdo Aba 1 -->
-                    <article class="tab-content active" id="tab-pqdt" role="tabpanel">
-                        <h3 class="tab-content-title">Brigada de Infantaria Paraquedista</h3>
-                        <div class="intel-grid">
-                            <div class="intel-box"><span class="intel-title">LOCALIZAÇÃO</span><p>Rio de Janeiro (RJ)</p></div>
-                            <div class="intel-box"><span class="intel-title">VOCAÇÃO E DIRETRIZ</span><p>Pronto-emprego em até 48 horas, projeção aeroterrestre e controle de crise.</p></div>
-                        </div>
-                        <div class="intel-full-box">
-                            <span class="intel-title">UNIDADES PRINCIPAIS DE MANOBRA</span>
-                            <ul>
-                                <li>25º Batalhão de Infantaria Paraquedista (25º BI Pqdt)</li>
-                                <li>26º Batalhão de Infantaria Paraquedista (26º BI Pqdt)</li>
-                                <li>27º Batalhão de Infantaria Paraquedista (27º BI Pqdt)</li>
-                                <li>Elementos integrados de apoio ao combate</li>
-                            </ul>
-                        </div>
-                    </article>
-
-                    <!-- Conteúdo Aba 2 -->
-                    <article class="tab-content" id="tab-cavex" role="tabpanel">
-                        <h3 class="tab-content-title">Comando de Aviação do Exército</h3>
-                        <div class="intel-grid">
-                            <div class="intel-box"><span class="intel-title">LOCALIZAÇÃO</span><p>Taubaté (SP)</p></div>
-                            <div class="intel-box"><span class="intel-title">VOCAÇÃO E DIRETRIZ</span><p>Mobilidade tática, apoio de fogo aéreo e infiltração de tropas de assalto.</p></div>
-                        </div>
-                        <div class="intel-full-box">
-                            <span class="intel-title">DESTAQUE OPERACIONAL</span>
-                            <p>Operação conjunta de alta intensidade com batalhões de infantaria leve e forças especiais.</p>
-                        </div>
-                    </article>
-
-                    <!-- Conteúdo Aba 3 -->
-                    <article class="tab-content" id="tab-copesp" role="tabpanel">
-                        <h3 class="tab-content-title">Comando de Operações Especiais</h3>
-                        <div class="intel-grid">
-                            <div class="intel-box"><span class="intel-title">LOCALIZAÇÃO</span><p>Goiânia (GO) e Rio de Janeiro (RJ)</p></div>
-                            <div class="intel-box"><span class="intel-title">VOCAÇÃO E DIRETRIZ</span><p>Ações diretas, reconhecimento especial e contraterrorismo em qualquer ambiente.</p></div>
-                        </div>
-                        <div class="intel-full-box">
-                            <span class="intel-title">COMPONENTES ESTRUTURAIS</span>
-                            <ul>
-                                <li>1º Batalhão de Forças Especiais (1º BFEsp)</li>
-                                <li>1º Batalhão de Ações de Comandos (1º BAC)</li>
-                                <li>Destacamento de Operações de Inteligência</li>
-                            </ul>
-                        </div>
-                    </article>
-                </div>
-            </div>
-        </section>
-
-        <!-- SEÇÃO 3: LINHA DO TEMPO SCANNER (FORMAÇÃO DO INFANTE) -->
-        <section class="tactical-section" id="secao-linha-tempo">
-            <h2 class="section-title"><span class="accent-color">></span> FORMAÇÃO E ADESTRAMENTO DO INFANTE</h2>
-            <p class="section-desc">Os pilares de instrução, especialização e forja dos combatentes de elite do Exército.</p>
-
-            <div class="timeline-container">
-                <!-- Linha central de escaneamento -->
-                <div class="timeline-scanner-axis">
-                    <div class="timeline-glow-pointer" id="timeline-pointer"></div>
-                </div>
-
-                <!-- Item 1 -->
-                <div class="timeline-item reveal-left">
-                    <div class="timeline-marker"></div>
-                    <div class="timeline-box-content">
-                        <span class="timeline-institution">ESA</span>
-                        <h4>Escola de Sargentos das Armas</h4>
-                        <p class="timeline-loc">Três Corações (MG)</p>
-                        <p>Responsável pela formação básica e consolidação da liderança do Sargento da Infantaria brasileira.</p>
-                    </div>
-                </div>
-
-                <!-- Item 2 -->
-                <div class="timeline-item reveal-right">
-                    <div class="timeline-marker"></div>
-                    <div class="timeline-box-content">
-                        <span class="timeline-institution">AMAN</span>
-                        <h4>Academia Militar das Agulhas Negras</h4>
-                        <p class="timeline-loc">Resende (RJ)</p>
-                        <p>Estabelecimento de ensino superior encarregado da formação do Oficial Combatente da Arma de Infantaria.</p>
-                    </div>
-                </div>
-
-                <!-- Item 3 -->
-                <div class="timeline-item reveal-left">
-                    <div class="timeline-marker"></div>
-                    <div class="timeline-box-content">
-                        <span class="timeline-institution">CIGS</span>
-                        <h4>Centro de Instrução de Guerra na Selva</h4>
-                        <p class="timeline-loc">Manaus (AM)</p>
-                        <p>Especialização de alto nível para o combate e sobrevivência no ambiente inóspito da selva amazônica.</p>
-                    </div>
-                </div>
-
-                <!-- Item 4 -->
-                <div class="timeline-item reveal-right">
-                    <div class="timeline-marker"></div>
-                    <div class="timeline-box-content">
-                        <span class="timeline-institution">CI PQDT GPB</span>
-                        <h4>Centro de Instrução Paraquedista General Penha Brasil</h4>
-                        <p class="timeline-loc">Rio de Janeiro (RJ)</p>
-                        <p>Habilitação técnica e física de militares para a execução de infiltrações e saltos aeroterrestres.</p>
-                    </div>
-                </div>
-
-                <!-- Item 5 -->
-                <div class="timeline-item reveal-left">
-                    <div class="timeline-marker"></div>
-                    <div class="timeline-box-content">
-                        <span class="timeline-institution">CIOPESP</span>
-                        <h4>Centro de Instrução de Operações Especiais</h4>
-                        <p class="timeline-loc">Niterói (RJ)</p>
-                        <p>Formação e adestramento cirúrgico de operadores especiais para missões de alta complexidade.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- SEÇÃO 4: ATUÇÃO CONTEMPORÂNEA -->
-        <section class="tactical-section" id="secao-atuacao">
-            <h2 class="section-title"><span class="accent-color">></span> ATUAÇÃO CONTEMPORÂNEA</h2>
-            <p class="section-desc">O emprego operacional real da infantaria em território nacional e missões internacionais.</p>
-            
-            <div class="act-grid">
-                <div class="act-card">
-                    <div class="act-card-header">OPERACIONAL: GLO</div>
-                    <p>A infantaria é ativamente empregada em operações de segurança pública em centros urbanos estratégicos, com destaque para a Intervenção Federal no Rio de Janeiro ocorrida em 2018.</p>
-                </div>
-                <div class="act-card">
-                    <div class="act-card-header">FORÇA INTERNACIONAL: MISSÕES DE PAZ</div>
-                    <p>O Brasil liderou militarmente a MINUSTAH no Haiti por mais de 13 anos. A infantaria leve atuou como a força de pacificação e estabilização predominante nos cenários críticos.</p>
-                </div>
-                <div class="act-card">
-                    <div class="act-card-header">SOBERANIA: FAIXA DE FRONTEIRA</div>
-                    <p>Atuação contínua através do Programa de Proteção Integrada de Fronteiras (PPIF), empregando batalhões de selva e de fronteira contra crimes transnacionais e fixação de presença.</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- SEÇÃO 5: MONITOR DE DESAFIOS (EFEITO GLITCH AUTOMÁTICO) -->
-        <section class="tactical-section" id="secao-desafios">
-            <h2 class="section-title"><span class="accent-color">></span> MONITOR DE DESAFIOS ATUAIS</h2>
-            <p class="section-desc">Vulnerabilidades estruturais e prioridades de modernização monitoradas em tempo real.</p>
-
-            <div class="challenges-grid">
-                <div class="challenge-card" data-glitch-card="true">
-                    <div class="challenge-alert-bar"></div>
-                    <span class="challenge-code">VULN_01 // TECH</span>
-                    <h4>Modernização Tecnológica</h4>
-                    <p>Necessidade de atualização constante em sistemas de comunicação criptografada, visão noturna e armamentos de precisão.</p>
-                </div>
-                <div class="challenge-card" data-glitch-card="true">
-                    <div class="challenge-alert-bar"></div>
-                    <span class="challenge-code">VULN_02 // RH</span>
-                    <h4>Recursos Humanos e Profissionalização</h4>
-                    <p>Retenção de talentos técnicos especializados e elevação contínua do nível de prontidão do contingente combatente.</p>
-                </div>
-                <div class="challenge-card" data-glitch-card="true">
-                    <div class="challenge-alert-bar"></div>
-                    <span class="challenge-code">VULN_03 // LOG</span>
-                    <h4>Logística Amazônica</h4>
-                    <p>Superação das severas barreiras geográficas e de transporte para suprimento de tropas isoladas na faixa de fronteira.</p>
-                </div>
-                <div class="challenge-card" data-glitch-card="true">
-                    <div class="challenge-alert-bar"></div>
-                    <span class="challenge-code">VULN_04 // INTEG</span>
-                    <h4>Integração Interagências</h4>
-                    <p>Aprimoramento das operações combinadas conjuntas com órgãos federais como a Polícia Federal, IBAMA e FUNAI.</p>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <footer class="tactical-footer">
-        <div class="border-deco-line"></div>
-        <p>CENTRAL DE DADOS TÁTICOS SIMULADA — INFANTARIA DO BRASIL</p>
-        <p class="footer-sub">ESTÉTICA RETRO-MILITAR // FONTE DE DADOS OFICIAIS</p>
-    </footer>
-
-    <!-- CONSOLE DE STATUS FIXO (TRANSMISSÃO CRIPTOGRAFADA) -->
-    <div class="live-status-console" id="live-console" aria-live="polite">
-        <span class="console-prompt">></span> <span class="console-text" id="console-output">INICIANDO ENLACE...</span>
+  <!-- HEADER PRINCIPAL -->
+  <header id="main-header">
+    <div class="header-status-bar">
+      <span class="status-tag">SISCOMIS: ATIVO</span>
+      <span class="status-tag">COTER · COMANDO DE OPERAÇÕES TERRESTRES</span>
+      <span class="status-tag" id="live-clock">00:00:00</span>
     </div>
+    <div class="header-core">
+      <div class="logo-container">
+        <span class="logo-bracket">[</span>
+        <span class="logo-text">F.E.</span>
+        <span class="logo-bracket">]</span>
+        <div class="logo-sub">Forças de Emprego Estratégico</div>
+      </div>
+      <div class="header-title-area">
+        <h1 class="main-heading">MILITARISMO E INFANTARIA NO BRASIL</h1>
+        <p class="sub-heading">Comandos atuais & Núcleo de Pronta-Resposta</p>
+      </div>
+      <div class="header-crypto">
+        <div class="crypto-dot"></div>
+        <span>CRIPTOGRAFADO</span>
+      </div>
+    </div>
+    <div class="header-divider"></div>
+  </header>
+
+  <main>
+    <!-- ===== SEÇÃO 1: COMANDOS MILITARES DE ÁREA ===== -->
+    <section id="comandos-area" class="section-dark">
+      <div class="section-title-wrapper">
+        <h2><span class="amber-hash">##</span> COMANDOS MILITARES DE ÁREA</h2>
+        <div class="title-underline"></div>
+      </div>
+
+      <div class="map-layout">
+        <!-- SVG do Brasil com zonas clicáveis -->
+        <div class="svg-map-container">
+          <svg viewBox="0 0 500 500" id="brasil-map-svg" xmlns="http://www.w3.org/2000/svg">
+            <!-- Contorno externo do Brasil -->
+            <path id="brasil-outline" d="M130,60 L210,35 L280,30 L350,45 L400,70 L430,110 L440,170 L430,230 L445,290 L430,350 L400,390 L340,415 L270,420 L190,395 L130,350 L95,290 L80,230 L75,170 L85,110 Z" fill="none" stroke="#00ff41" stroke-width="2" stroke-opacity="0.5" />
+            
+            <!-- Zonas de Comando -->
+            <path data-comando="CMN" class="map-zone" d="M195,55 L280,48 L310,85 L280,125 L200,135 L170,90 Z" />
+            <path data-comando="CMA" class="map-zone" d="M130,95 L200,135 L190,185 L120,175 L90,125 Z" />
+            <path data-comando="CMNE" class="map-zone" d="M295,80 L360,70 L380,140 L360,210 L290,200 L265,140 Z" />
+            <path data-comando="CMP" class="map-zone" d="M210,185 L275,195 L285,235 L235,255 L195,235 Z" />
+            <path data-comando="CML" class="map-zone" d="M240,245 L305,235 L335,275 L305,320 L255,305 Z" />
+            <path data-comando="CMSE" class="map-zone" d="M195,255 L255,265 L255,305 L205,325 L165,285 Z" />
+            <path data-comando="CMS" class="map-zone" d="M155,315 L215,335 L225,375 L175,395 L125,355 Z" />
+            <path data-comando="CMO" class="map-zone" d="M115,215 L185,245 L155,315 L95,295 L75,245 Z" />
+            
+            <!-- Pontos de sede -->
+            <circle data-comando="CMN" class="map-dot" cx="235" cy="88" r="6" />
+            <circle data-comando="CMA" class="map-dot" cx="155" cy="148" r="6" />
+            <circle data-comando="CMNE" class="map-dot" cx="340" cy="145" r="6" />
+            <circle data-comando="CMP" class="map-dot" cx="242" cy="230" r="6" />
+            <circle data-comando="CML" class="map-dot" cx="282" cy="280" r="6" />
+            <circle data-comando="CMSE" class="map-dot" cx="228" cy="290" r="6" />
+            <circle data-comando="CMS" class="map-dot" cx="188" cy="355" r="6" />
+            <circle data-comando="CMO" class="map-dot" cx="135" cy="270" r="6" />
+          </svg>
+        </div>
+        
+        <!-- Painel holográfico de detalhes -->
+        <div class="map-info-panel" id="map-info-panel">
+          <div class="panel-holographic">
+            <div class="holo-header">INTELIGÊNCIA TERRITORIAL</div>
+            <div class="holo-body" id="holo-body">
+              <p class="holo-placeholder">APONTE PARA UMA REGIÃO NO MAPA</p>
+            </div>
+            <div class="holo-coordinates" id="holo-coords">COORD: ---</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Lista rápida de comandos -->
+      <div class="quick-command-list" id="quick-command-list">
+        <button data-comando="CMN">CMN · Belém</button>
+        <button data-comando="CMA">CMA · Manaus</button>
+        <button data-comando="CMNE">CMNE · Recife</button>
+        <button data-comando="CMP">CMP · Brasília</button>
+        <button data-comando="CML">CML · Rio de Janeiro</button>
+        <button data-comando="CMSE">CMSE · São Paulo</button>
+        <button data-comando="CMS">CMS · Porto Alegre</button>
+        <button data-comando="CMO">CMO · Campo Grande</button>
+      </div>
+    </section>
+
+    <!-- ===== SEÇÃO 2: FORÇAS DE EMPREGO ESTRATÉGICO (ABAS) ===== -->
+    <section id="forcas-emprego" class="section-dark">
+      <div class="section-title-wrapper">
+        <h2><span class="amber-hash">##</span> NÚCLEO DE PRONTA-RESPOSTA</h2>
+        <div class="title-underline"></div>
+      </div>
+
+      <div class="tabs-war-room">
+        <div class="tabs-nav" id="tabs-nav">
+          <button class="tab-btn active" data-tab="pqdt">
+            <span class="tab-icon">⚡</span> BRIGADA PARAQUEDISTA
+          </button>
+          <button class="tab-btn" data-tab="cavex">
+            <span class="tab-icon">🚁</span> AVIAÇÃO DO EXÉRCITO
+          </button>
+          <button class="tab-btn" data-tab="opesp">
+            <span class="tab-icon">🎯</span> OPERAÇÕES ESPECIAIS
+          </button>
+          <div class="tab-highlighter" id="tab-highlighter"></div>
+        </div>
+
+        <div class="tabs-panels" id="tabs-panels">
+          <!-- Painel Paraquedista -->
+          <div class="tab-panel active" id="panel-pqdt">
+            <div class="force-card">
+              <div class="force-card-head">
+                <h3>BRIGADA DE INFANTARIA PARAQUEDISTA</h3>
+                <span class="force-badge ready">PRONTA 48H</span>
+              </div>
+              <div class="force-card-body">
+                <div class="force-details">
+                  <div class="detail-row"><span class="detail-label">Localização:</span> Rio de Janeiro (RJ)</div>
+                  <div class="detail-row"><span class="detail-label">Vocação:</span> Pronto-emprego, projeção aeroterrestre, controle de crise</div>
+                  <div class="detail-row"><span class="detail-label">Unidades:</span> 25º BI Pqdt · 26º BI Pqdt · 27º BI Pqdt + apoio</div>
+                </div>
+                <div class="force-stats">
+                  <div class="stat-box"><span class="stat-value">48H</span><span class="stat-label">Prontidão</span></div>
+                  <div class="stat-box"><span class="stat-value">3</span><span class="stat-label">Batalhões</span></div>
+                  <div class="stat-box"><span class="stat-value">NÍVEL 1</span><span class="stat-label">Prioridade</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Painel Aviação -->
+          <div class="tab-panel" id="panel-cavex">
+            <div class="force-card">
+              <div class="force-card-head">
+                <h3>COMANDO DE AVIAÇÃO DO EXÉRCITO</h3>
+                <span class="force-badge operational">OPERACIONAL</span>
+              </div>
+              <div class="force-card-body">
+                <div class="force-details">
+                  <div class="detail-row"><span class="detail-label">Localização:</span> Taubaté (SP)</div>
+                  <div class="detail-row"><span class="detail-label">Vocação:</span> Mobilidade tática, apoio de fogo aéreo, infiltração</div>
+                  <div class="detail-row"><span class="detail-label">Destaque:</span> Operação conjunta com infantaria leve e forças especiais</div>
+                </div>
+                <div class="force-stats">
+                  <div class="stat-box"><span class="stat-value">24H</span><span class="stat-label">Alerta</span></div>
+                  <div class="stat-box"><span class="stat-value">NACIONAL</span><span class="stat-label">Cobertura</span></div>
+                  <div class="stat-box"><span class="stat-value">NÍVEL 1</span><span class="stat-label">Prioridade</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Painel Operações Especiais -->
+          <div class="tab-panel" id="panel-opesp">
+            <div class="force-card">
+              <div class="force-card-head">
+                <h3>COMANDO DE OPERAÇÕES ESPECIAIS</h3>
+                <span class="force-badge classified">SIGILOSO</span>
+              </div>
+              <div class="force-card-body">
+                <div class="force-details">
+                  <div class="detail-row"><span class="detail-label">Localização:</span> Goiânia (GO) · Rio de Janeiro (RJ)</div>
+                  <div class="detail-row"><span class="detail-label">Componentes:</span> 1º BFEsp · 1º BAC · DOI</div>
+                  <div class="detail-row"><span class="detail-label">Vocação:</span> Ações diretas, reconhecimento especial, contraterrorismo</div>
+                </div>
+                <div class="force-stats">
+                  <div class="stat-box"><span class="stat-value">SIGILO</span><span class="stat-label">Nível</span></div>
+                  <div class="stat-box"><span class="stat-value">ELITE</span><span class="stat-label">Tropa</span></div>
+                  <div class="stat-box"><span class="stat-value">NÍVEL 0</span><span class="stat-label">Prioridade</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== SEÇÃO 3: FORMAÇÃO E ADESTRAMENTO (LINHA DO TEMPO) ===== -->
+    <section id="formacao-adestramento" class="section-dark">
+      <div class="section-title-wrapper">
+        <h2><span class="amber-hash">##</span> FORMAÇÃO E ADESTRAMENTO</h2>
+        <div class="title-underline"></div>
+      </div>
+
+      <div class="timeline-scanner" id="timeline-scanner">
+        <div class="timeline-rail"></div>
+        
+        <div class="timeline-entry left" data-animate>
+          <div class="timeline-marker"></div>
+          <div class="timeline-card">
+            <h4>ESA</h4>
+            <p>Escola de Sargentos das Armas</p>
+            <span>Três Corações (MG)</span>
+          </div>
+        </div>
+        
+        <div class="timeline-entry right" data-animate>
+          <div class="timeline-marker"></div>
+          <div class="timeline-card">
+            <h4>AMAN</h4>
+            <p>Academia Militar das Agulhas Negras</p>
+            <span>Resende (RJ)</span>
+          </div>
+        </div>
+        
+        <div class="timeline-entry left" data-animate>
+          <div class="timeline-marker"></div>
+          <div class="timeline-card">
+            <h4>CIGS</h4>
+            <p>Centro de Instrução de Guerra na Selva</p>
+            <span>Manaus (AM)</span>
+          </div>
+        </div>
+        
+        <div class="timeline-entry right" data-animate>
+          <div class="timeline-marker"></div>
+          <div class="timeline-card">
+            <h4>CI Pqdt GPB</h4>
+            <p>Centro de Instrução Paraquedista</p>
+            <span>Rio de Janeiro (RJ)</span>
+          </div>
+        </div>
+        
+        <div class="timeline-entry left" data-animate>
+          <div class="timeline-marker"></div>
+          <div class="timeline-card">
+            <h4>CIOpEsp</h4>
+            <p>Centro de Instrução de Operações Especiais</p>
+            <span>Niterói (RJ)</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== SEÇÃO 4: ATUAÇÃO CONTEMPORÂNEA ===== -->
+    <section id="atuacao-contemporanea" class="section-dark">
+      <div class="section-title-wrapper">
+        <h2><span class="amber-hash">##</span> ATUAÇÃO CONTEMPORÂNEA</h2>
+        <div class="title-underline"></div>
+      </div>
+      
+      <div class="cards-mission-grid">
+        <article class="mission-card">
+          <div class="card-corner-decoration"></div>
+          <h4>GLO</h4>
+          <p>Operações de Garantia da Lei e da Ordem em centros urbanos. Intervenção Federal no Rio de Janeiro (2018).</p>
+        </article>
+        
+        <article class="mission-card">
+          <div class="card-corner-decoration"></div>
+          <h4>MISSÕES DE PAZ</h4>
+          <p>Comando da MINUSTAH no Haiti por mais de 13 anos, com infantaria leve como força predominante.</p>
+        </article>
+        
+        <article class="mission-card">
+          <div class="card-corner-decoration"></div>
+          <h4>FAIXA DE FRONTEIRA</h4>
+          <p>Programa de Proteção Integrada de Fronteiras (PPIF) com batalhões de selva e fronteira.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ===== SEÇÃO 5: ACERVO / GALERIA (IMAGENS REAIS) ===== -->
+    <section id="acervo-galeria" class="section-dark">
+      <div class="section-title-wrapper">
+        <h2><span class="amber-hash">##</span> ACERVO TÁTICO</h2>
+        <div class="title-underline"></div>
+      </div>
+      <p class="section-description">Registros reais das Forças de Emprego Estratégico do Exército Brasileiro.</p>
+
+      <div class="gallery-grid" id="gallery-grid">
+        <!-- As imagens são carregadas dinamicamente pelo JS -->
+      </div>
+      
+      <!-- Lightbox -->
+      <div class="lightbox-overlay" id="lightbox-overlay">
+        <div class="lightbox-content">
+          <span class="lightbox-close" id="lightbox-close">&times;</span>
+          <img id="lightbox-img" src="" alt="Visualização ampliada" />
+          <p id="lightbox-caption"></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== SEÇÃO 6: DESAFIOS ATUAIS (GLITCH) ===== -->
+    <section id="desafios-glitch" class="section-dark">
+      <div class="section-title-wrapper">
+        <h2><span class="amber-hash">##</span> DESAFIOS ATUAIS</h2>
+        <div class="title-underline"></div>
+      </div>
+      
+      <div class="glitch-card-grid" id="glitch-card-grid">
+        <div class="glitch-card" data-glitch>
+          <span class="glitch-icon">[!]</span>
+          <h5>Modernização Tecnológica</h5>
+          <p>Sistemas embarcados, rádios definidos por software, guerra centrada em redes.</p>
+        </div>
+        
+        <div class="glitch-card" data-glitch>
+          <span class="glitch-icon">[!]</span>
+          <h5>Recursos Humanos</h5>
+          <p>Retenção de talentos, revisão do serviço militar obrigatório, profissionalização.</p>
+        </div>
+        
+        <div class="glitch-card" data-glitch>
+          <span class="glitch-icon">[!]</span>
+          <h5>Logística Amazônica</h5>
+          <p>Manutenção da tropa em ambiente hostil com grandes distâncias e infraestrutura limitada.</p>
+        </div>
+        
+        <div class="glitch-card" data-glitch>
+          <span class="glitch-icon">[!]</span>
+          <h5>Integração Interagências</h5>
+          <p>Atuação coordenada com Polícia Federal, IBAMA, FUNAI e outros órgãos.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer id="main-footer">
+    <div class="footer-divider"></div>
+    <p>© CENTRO DE OPERAÇÕES TERRESTRES · COTER · BRASIL</p>
+    <p class="footer-quote">"Na infantaria, o homem decide. A vontade de vencer é forjada no adestramento e na liderança."</p>
+  </footer>
+
+  <!-- CONSOLE TÁTICO FIXO -->
+  <div id="tactical-console">
+    <div id="console-header">TERMINAL TÁTICO</div>
+    <div id="console-output"></div>
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>
