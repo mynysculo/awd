@@ -1,265 +1,135 @@
 /**
  * ============================================
- * MILITARISMO E INFANTARIA NO BRASIL
- * Forças de Emprego Estratégico
- * JavaScript Puro (Vanilla JS) - Sem Dependências
+ * GORRO PESADO - SISTEMA DE CONTROLE TÁTICO
+ * FORÇAS DE EMPREGO ESTRATÉGICO
+ * EXÉRCITO BRASILEIRO
+ * ============================================
+ * JavaScript Puro - Vanilla JS
+ * Sem dependências externas
  * ============================================
  */
 
 'use strict';
 
 // ============================================
-// INICIALIZAÇÃO PRINCIPAL
+// INICIALIZAÇÃO PRINCIPAL DO SISTEMA
 // ============================================
 document.addEventListener('DOMContentLoaded', function() {
-    // Previne problemas de carregamento
-    initAllSystems();
+    console.log('%c[GORRO PESADO] %cInicializando sistemas operacionais...', 
+        'color: #d4b020; font-weight: bold; font-size: 16px;', 
+        'color: #8b7d6b;');
+    
+    // Inicializa todos os módulos
+    initNavigation();
+    initForceCards();
+    initMapSystem();
+    initTimeline();
+    initGallery();
+    initDesafiosGlitch();
+    initStatusConsole();
+    initDustCanvas();
+    initLightbox();
+    initQuickButtons();
+    initKeyboardCommands();
+    
+    console.log('%c[GORRO PESADO] %cTodos os sistemas prontos. Prontidão operacional confirmada.', 
+        'color: #d4b020; font-weight: bold;', 
+        'color: #6b8c42;');
 });
 
-/**
- * Inicializa todos os sistemas do site
- */
-function initAllSystems() {
-    initNavigation();
-    initFETabs();
-    initMapInteractions();
-    initTimelineScanner();
-    initGallerySystem();
-    initDesafiosGlitch();
-    initLiveConsole();
-    initRadarCanvas();
-    initClock();
-    initGlitchOverlay();
-    initQuickCommands();
-    initKeyboardShortcuts();
-    initSmoothScroll();
-    initPerformanceOptimizations();
-    console.log('%c[SISCOMIS] %cTodos os sistemas operacionais. Prontidão confirmada.', 
-        'color: #00ff41; font-weight: bold;', 'color: #8b9a8b;');
-}
-
 // ============================================
-// 1. SISTEMA DE NAVEGAÇÃO PRINCIPAL
+// 1. SISTEMA DE NAVEGAÇÃO MUSCULAR
 // ============================================
 function initNavigation() {
-    const navLinks = document.querySelectorAll('.nav-link');
-    const contentSections = document.querySelectorAll('.content-section');
-    const navIndicator = document.getElementById('navIndicator');
+    const tabs = document.querySelectorAll('.muscle-tab');
+    const sections = document.querySelectorAll('.war-section');
     
-    if (!navLinks.length || !contentSections.length) {
-        console.warn('[SISCOMIS] Navegação: Elementos não encontrados');
+    if (!tabs.length || !sections.length) {
+        console.warn('[GORRO PESADO] Navegação: Elementos não encontrados');
         return;
-    }
-    
-    /**
-     * Atualiza o indicador de navegação
-     */
-    function updateNavIndicator(activeLink) {
-        if (!navIndicator || !activeLink) return;
-        
-        const linkRect = activeLink.getBoundingClientRect();
-        const navRect = activeLink.closest('.main-navigation').getBoundingClientRect();
-        
-        navIndicator.style.left = (linkRect.left - navRect.left) + 'px';
-        navIndicator.style.width = linkRect.width + 'px';
     }
     
     /**
      * Ativa uma seção específica
      */
-    function activateSection(sectionName, linkElement) {
+    function activateSection(targetName) {
         // Desativa todas as seções
-        contentSections.forEach(section => {
+        sections.forEach(section => {
             section.classList.remove('active');
         });
         
-        // Desativa todos os links
-        navLinks.forEach(link => {
-            link.classList.remove('active');
-        });
-        
-        // Ativa a seção correspondente
-        const targetSection = document.getElementById('section-' + sectionName);
-        if (targetSection) {
-            targetSection.classList.add('active');
-            
-            // Trigger reflow para animação
-            void targetSection.offsetWidth;
-        }
-        
-        // Ativa o link
-        if (linkElement) {
-            linkElement.classList.add('active');
-            updateNavIndicator(linkElement);
-        }
-        
-        // Dispara evento personalizado
-        document.dispatchEvent(new CustomEvent('sectionChanged', {
-            detail: { section: sectionName }
-        }));
-    }
-    
-    /**
-     * Manipulador de clique nos links de navegação
-     */
-    navLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            const sectionName = this.getAttribute('data-section');
-            if (!sectionName) return;
-            
-            // Efeito de glitch rápido na transição
-            triggerQuickGlitch();
-            
-            // Pequeno delay para o efeito visual
-            setTimeout(() => {
-                activateSection(sectionName, this);
-                
-                // Scroll suave para o topo da seção
-                const targetSection = document.getElementById('section-' + sectionName);
-                if (targetSection) {
-                    targetSection.scrollIntoView({ 
-                        behavior: 'smooth', 
-                        block: 'start' 
-                    });
-                }
-            }, 100);
-        });
-    });
-    
-    // Inicializa o indicador com o link ativo
-    const initialActiveLink = document.querySelector('.nav-link.active');
-    if (initialActiveLink) {
-        setTimeout(() => updateNavIndicator(initialActiveLink), 200);
-    }
-    
-    // Atualiza indicador no resize
-    window.addEventListener('resize', () => {
-        const activeLink = document.querySelector('.nav-link.active');
-        if (activeLink) updateNavIndicator(activeLink);
-    });
-    
-    // Atualiza indicador quando seção muda por outros meios
-    document.addEventListener('sectionChanged', function(e) {
-        const activeLink = document.querySelector('.nav-link.active');
-        if (activeLink) updateNavIndicator(activeLink);
-    });
-}
-
-// ============================================
-// 2. SISTEMA DE ABAS DAS FORÇAS ESTRATÉGICAS
-// ============================================
-function initFETabs() {
-    const feTabs = document.querySelectorAll('.fe-tab-button');
-    const fePanels = document.querySelectorAll('.fe-content-panel');
-    const feScanline = document.getElementById('feScanline');
-    const feTabsContent = document.getElementById('feTabsContent');
-    
-    if (!feTabs.length || !fePanels.length) {
-        console.warn('[SISCOMIS] Abas FE: Elementos não encontrados');
-        return;
-    }
-    
-    let isTransitioning = false;
-    
-    /**
-     * Efeito de scanline durante transição
-     */
-    function triggerScanline(callback) {
-        if (!feScanline) {
-            if (callback) callback();
-            return;
-        }
-        
-        feScanline.classList.remove('scanning');
-        void feScanline.offsetWidth; // Trigger reflow
-        feScanline.classList.add('scanning');
-        
-        setTimeout(() => {
-            if (callback) callback();
-        }, 300);
-    }
-    
-    /**
-     * Ativa painel específico
-     */
-    function activateFEPanel(panelName, tabElement) {
-        if (isTransitioning) return;
-        isTransitioning = true;
-        
-        // Desativa todos os painéis
-        fePanels.forEach(panel => {
-            panel.classList.remove('active');
-        });
-        
-        // Desativa todas as abas
-        feTabs.forEach(tab => {
+        // Desativa todas as tabs
+        tabs.forEach(tab => {
             tab.classList.remove('active');
         });
         
-        // Executa scanline
-        triggerScanline(() => {
-            // Ativa o painel correspondente
-            const targetPanel = document.getElementById('panel-' + panelName);
-            if (targetPanel) {
-                targetPanel.classList.add('active');
-            }
-            
-            // Ativa a aba
-            if (tabElement) {
-                tabElement.classList.add('active');
-            }
-            
-            // Efeito de flicker no conteúdo
-            if (feTabsContent) {
-                feTabsContent.style.opacity = '0.8';
-                setTimeout(() => {
-                    feTabsContent.style.opacity = '1';
-                }, 50);
-            }
-            
-            isTransitioning = false;
-        });
+        // Ativa a seção correspondente
+        const targetSection = document.getElementById('sec-' + targetName);
+        if (targetSection) {
+            targetSection.classList.add('active');
+        }
+        
+        // Ativa a tab correspondente
+        const targetTab = document.querySelector(`.muscle-tab[data-target="${targetName}"]`);
+        if (targetTab) {
+            targetTab.classList.add('active');
+        }
+        
+        // Scroll para o topo da seção
+        if (targetSection) {
+            setTimeout(() => {
+                targetSection.scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'start' 
+                });
+            }, 100);
+        }
+        
+        // Efeito de impacto
+        triggerScreenShake();
     }
     
     /**
-     * Manipulador de clique nas abas
+     * Efeito de tremor na tela
      */
-    feTabs.forEach(tab => {
+    function triggerScreenShake() {
+        const container = document.querySelector('.war-container');
+        if (!container) return;
+        
+        container.style.transform = 'translateX(3px)';
+        setTimeout(() => {
+            container.style.transform = 'translateX(-3px)';
+            setTimeout(() => {
+                container.style.transform = 'translateX(0)';
+            }, 50);
+        }, 50);
+    }
+    
+    // Adiciona eventos de clique nas tabs
+    tabs.forEach(tab => {
         tab.addEventListener('click', function() {
-            if (isTransitioning) return;
-            if (this.classList.contains('active')) return;
-            
-            const panelName = this.getAttribute('data-fe');
-            if (!panelName) return;
-            
-            activateFEPanel(panelName, this);
+            const target = this.getAttribute('data-target');
+            if (target) {
+                activateSection(target);
+            }
         });
     });
     
-    // Suporte a teclado para acessibilidade
-    feTabs.forEach((tab, index) => {
+    // Suporte a teclado para tabs
+    tabs.forEach((tab, index) => {
+        tab.setAttribute('tabindex', '0');
+        tab.setAttribute('role', 'tab');
+        tab.setAttribute('aria-selected', tab.classList.contains('active') ? 'true' : 'false');
+        
         tab.addEventListener('keydown', function(e) {
             let targetTab = null;
             
-            switch(e.key) {
-                case 'ArrowRight':
-                    e.preventDefault();
-                    targetTab = feTabs[(index + 1) % feTabs.length];
-                    break;
-                case 'ArrowLeft':
-                    e.preventDefault();
-                    targetTab = feTabs[(index - 1 + feTabs.length) % feTabs.length];
-                    break;
-                case 'Home':
-                    e.preventDefault();
-                    targetTab = feTabs[0];
-                    break;
-                case 'End':
-                    e.preventDefault();
-                    targetTab = feTabs[feTabs.length - 1];
-                    break;
+            if (e.key === 'ArrowRight') {
+                e.preventDefault();
+                targetTab = tabs[(index + 1) % tabs.length];
+            } else if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                targetTab = tabs[(index - 1 + tabs.length) % tabs.length];
             }
             
             if (targetTab) {
@@ -271,282 +141,394 @@ function initFETabs() {
 }
 
 // ============================================
-// 3. MAPA INTERATIVO DE COMANDOS
+// 2. CARDS DAS FORÇAS ESTRATÉGICAS (FLIP)
 // ============================================
-function initMapInteractions() {
-    const mapRegions = document.querySelectorAll('.cm-region');
-    const holoPanel = document.getElementById('holoPanel');
-    const holoContent = document.getElementById('holoContent');
-    const holoCoords = document.getElementById('holoCoords');
+function initForceCards() {
+    const forceCards = document.querySelectorAll('.force-card');
+    const detailBtns = document.querySelectorAll('.force-detail-btn');
     
-    if (!mapRegions.length) {
-        console.warn('[SISCOMIS] Mapa: Regiões não encontradas');
+    if (!forceCards.length) {
+        console.warn('[GORRO PESADO] Force Cards: Não encontrados');
         return;
     }
     
     /**
-     * Atualiza o painel holográfico
+     * Faz o flip de um card específico
      */
-    function updateHoloPanel(dataInfo, cmElement) {
-        if (!holoContent || !dataInfo) return;
+    function flipCard(card) {
+        // Fecha outros cards abertos
+        forceCards.forEach(otherCard => {
+            if (otherCard !== card && otherCard.classList.contains('flipped')) {
+                otherCard.classList.remove('flipped');
+            }
+        });
         
-        const infoParts = dataInfo.split('|');
-        if (infoParts.length < 5) return;
+        // Alterna o estado do card
+        card.classList.toggle('flipped');
         
-        const [nome, sigla, sede, descricao, extra] = infoParts;
-        
-        holoContent.innerHTML = `
-            <div class="holo-data-row">
-                <span class="holo-label">COMANDO</span>
-                <span class="holo-value highlight">${nome}</span>
-            </div>
-            <div class="holo-data-row">
-                <span class="holo-label">SIGLA</span>
-                <span class="holo-value">${sigla}</span>
-            </div>
-            <div class="holo-data-row">
-                <span class="holo-label">SEDE</span>
-                <span class="holo-value">${sede}</span>
-            </div>
-            <div class="holo-data-row">
-                <span class="holo-label">MISSÃO</span>
-                <span class="holo-value">${descricao}</span>
-            </div>
-            <div class="holo-data-row">
-                <span class="holo-label">INFO ADICIONAL</span>
-                <span class="holo-value">${extra}</span>
-            </div>
-        `;
-        
-        // Adiciona classe de destaque
-        if (holoPanel) {
-            holoPanel.classList.add('data-received');
-            setTimeout(() => {
-                holoPanel.classList.remove('data-received');
-            }, 500);
-        }
+        // Som tático (visual)
+        createImpactEffect(card);
     }
     
     /**
-     * Atualiza coordenadas simuladas
+     * Cria efeito visual de impacto
      */
-    function updateCoords(event) {
-        if (!holoCoords) return;
-        
-        const mapContainer = document.querySelector('.map-brazil-svg');
-        if (!mapContainer) return;
-        
-        const rect = mapContainer.getBoundingClientRect();
-        const x = ((event.clientX - rect.left) / rect.width * 100).toFixed(1);
-        const y = ((event.clientY - rect.top) / rect.height * 100).toFixed(1);
-        
-        const lat = (5.2744 + (y / 100) * 28.0).toFixed(2);
-        const lon = (-73.9831 + (x / 100) * 38.0).toFixed(2);
-        
-        holoCoords.textContent = `LAT: ${lat}°S | LON: ${lon}°W`;
-    }
-    
-    /**
-     * Limpa o painel holográfico
-     */
-    function clearHoloPanel() {
-        if (!holoContent) return;
-        
-        holoContent.innerHTML = `
-            <p class="holo-placeholder">
-                Passe o mouse sobre uma região do mapa para visualizar 
-                informações detalhadas do Comando Militar.
-            </p>
+    function createImpactEffect(element) {
+        const ripple = document.createElement('div');
+        ripple.style.cssText = `
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border: 2px solid #d4b020;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            animation: rippleEffect 0.6s ease-out forwards;
+            pointer-events: none;
+            z-index: 10;
         `;
         
-        if (holoCoords) {
-            holoCoords.textContent = 'LAT: --.--°S | LON: --.--°W';
-        }
+        element.style.position = 'relative';
+        element.style.overflow = 'visible';
+        element.appendChild(ripple);
+        
+        setTimeout(() => {
+            ripple.remove();
+        }, 600);
     }
     
-    // Adiciona event listeners para cada região
-    mapRegions.forEach(region => {
-        region.addEventListener('mouseenter', function(e) {
-            const dataInfo = this.getAttribute('data-info');
-            updateHoloPanel(dataInfo, this);
-            
-            // Efeito de highlight na região
-            this.style.zIndex = '10';
-        });
-        
-        region.addEventListener('mousemove', function(e) {
-            updateCoords(e);
-        });
-        
-        region.addEventListener('mouseleave', function() {
-            clearHoloPanel();
-            this.style.zIndex = '1';
-        });
-        
-        // Suporte a toque para dispositivos móveis
-        region.addEventListener('touchstart', function(e) {
-            e.preventDefault();
-            const dataInfo = this.getAttribute('data-info');
-            updateHoloPanel(dataInfo, this);
-            
-            const touch = e.touches[0];
-            updateCoords(touch);
-        });
-        
-        region.addEventListener('touchend', function() {
-            setTimeout(clearHoloPanel, 2000);
+    // Eventos de clique nos botões de detalhe
+    detailBtns.forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const card = this.closest('.force-card');
+            if (card) {
+                flipCard(card);
+            }
         });
     });
     
-    // Suporte a teclado para acessibilidade
-    mapRegions.forEach(region => {
-        region.setAttribute('tabindex', '0');
-        region.setAttribute('role', 'button');
-        region.setAttribute('aria-label', region.getAttribute('data-cm') || 'Comando Militar');
-        
-        region.addEventListener('focus', function() {
-            const dataInfo = this.getAttribute('data-info');
-            updateHoloPanel(dataInfo, this);
+    // Eventos de clique no card inteiro
+    forceCards.forEach(card => {
+        card.addEventListener('click', function(e) {
+            // Não faz flip se clicou no botão
+            if (e.target.closest('.force-detail-btn')) return;
+            flipCard(this);
         });
         
-        region.addEventListener('blur', function() {
-            clearHoloPanel();
+        // Suporte a teclado
+        card.setAttribute('tabindex', '0');
+        card.setAttribute('role', 'button');
+        card.setAttribute('aria-label', 'Card de força estratégica - clique para detalhes');
+        
+        card.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                flipCard(this);
+            }
         });
     });
 }
 
 // ============================================
-// 4. TIMELINE SCANNER (FORMAÇÃO E ADESTRAMENTO)
+// 3. SISTEMA DE MAPA INTERATIVO
 // ============================================
-function initTimelineScanner() {
-    const timelineItems = document.querySelectorAll('.timeline-item');
-    const scanBeam = document.getElementById('scanBeam');
-    const timelineContainer = document.getElementById('timelineScanner');
+function initMapSystem() {
+    const cmZones = document.querySelectorAll('.cm-zone');
+    const mapInfoBody = document.getElementById('mapInfoBody');
+    const mapInfoPanel = document.getElementById('mapInfoPanel');
     
-    if (!timelineItems.length) {
-        console.warn('[SISCOMIS] Timeline: Itens não encontrados');
+    if (!cmZones.length || !mapInfoBody) {
+        console.warn('[GORRO PESADO] Mapa: Elementos não encontrados');
         return;
     }
     
-    let lastScrollY = window.scrollY;
-    let ticking = false;
+    let activeZone = null;
     
     /**
-     * Atualiza a posição do feixe de scan
+     * Atualiza o painel de informações
      */
-    function updateScanBeam() {
-        if (!scanBeam || !timelineContainer) return;
+    function updateInfoPanel(zoneElement) {
+        const cmCode = zoneElement.getAttribute('data-cm');
+        const cmName = zoneElement.getAttribute('data-name');
+        const cmSede = zoneElement.getAttribute('data-sede');
+        const cmInfo = zoneElement.getAttribute('data-info');
         
-        const containerRect = timelineContainer.getBoundingClientRect();
-        const containerTop = containerRect.top;
-        const containerHeight = containerRect.height;
-        const windowHeight = window.innerHeight;
+        mapInfoBody.innerHTML = `
+            <div class="cm-data-row">
+                <span class="cm-label">SIGLA</span>
+                <span class="cm-value" style="font-size:1.5rem;color:#d4b020;">${cmCode}</span>
+            </div>
+            <div class="cm-data-row">
+                <span class="cm-label">COMANDO</span>
+                <span class="cm-value">${cmName}</span>
+            </div>
+            <div class="cm-data-row">
+                <span class="cm-label">SEDE</span>
+                <span class="cm-value">${cmSede}</span>
+            </div>
+            <div class="cm-data-row">
+                <span class="cm-label">MISSÃO PRINCIPAL</span>
+                <span class="cm-value">${cmInfo}</span>
+            </div>
+            <div class="cm-data-row">
+                <span class="cm-label">STATUS</span>
+                <span class="cm-value" style="color:#6b8c42;">OPERACIONAL</span>
+            </div>
+        `;
         
-        // Calcula a posição relativa do scan
-        let scanPosition = ((windowHeight / 2 - containerTop) / containerHeight) * 100;
-        scanPosition = Math.max(0, Math.min(100, scanPosition));
-        
-        scanBeam.style.top = scanPosition + '%';
-        
-        // Ajusta opacidade baseado na visibilidade
-        if (containerTop + containerHeight < 0 || containerTop > windowHeight) {
-            scanBeam.style.opacity = '0';
-        } else {
-            scanBeam.style.opacity = '0.8';
+        // Efeito de atualização no painel
+        if (mapInfoPanel) {
+            mapInfoPanel.style.transform = 'scale(1.02)';
+            setTimeout(() => {
+                mapInfoPanel.style.transform = 'scale(1)';
+            }, 150);
         }
     }
     
     /**
-     * Revela itens da timeline baseado na posição do scroll
+     * Limpa o painel de informações
      */
-    function revealTimelineItems() {
-        timelineItems.forEach(item => {
-            const rect = item.getBoundingClientRect();
-            const windowHeight = window.innerHeight;
+    function clearInfoPanel() {
+        mapInfoBody.innerHTML = `
+            <p class="map-placeholder">APROXIME O CURSOR DE UMA ZONA DE COMANDO</p>
+        `;
+    }
+    
+    /**
+     * Ativa uma zona do mapa
+     */
+    function activateZone(zoneElement) {
+        // Desativa zona anterior
+        if (activeZone) {
+            activeZone.classList.remove('active-zone');
+        }
+        
+        // Ativa nova zona
+        zoneElement.classList.add('active-zone');
+        activeZone = zoneElement;
+        
+        // Atualiza painel
+        updateInfoPanel(zoneElement);
+        
+        // Efeito de pulso no SVG
+        const rect = zoneElement.querySelector('rect');
+        if (rect) {
+            const originalFill = rect.getAttribute('fill');
+            rect.setAttribute('fill', 'rgba(139, 26, 26, 0.6)');
+            setTimeout(() => {
+                if (activeZone === zoneElement) {
+                    rect.setAttribute('fill', 'rgba(139, 26, 26, 0.5)');
+                }
+            }, 300);
+        }
+    }
+    
+    /**
+     * Desativa a zona ativa
+     */
+    function deactivateZone() {
+        if (activeZone) {
+            activeZone.classList.remove('active-zone');
+            const rect = activeZone.querySelector('rect');
+            if (rect) {
+                rect.setAttribute('fill', 'rgba(60, 80, 40, 0.4)');
+            }
+            activeZone = null;
+        }
+        clearInfoPanel();
+    }
+    
+    // Eventos para cada zona do mapa
+    cmZones.forEach(zone => {
+        // Mouse events
+        zone.addEventListener('mouseenter', function() {
+            activateZone(this);
+        });
+        
+        zone.addEventListener('mouseleave', function() {
+            // Pequeno delay para evitar flicker
+            setTimeout(() => {
+                if (!zone.matches(':hover')) {
+                    deactivateZone();
+                }
+            }, 100);
+        });
+        
+        zone.addEventListener('click', function() {
+            // Mantém a zona ativa após clique
+            activateZone(this);
             
-            // Calcula quanto do item está visível
-            const visiblePortion = Math.max(0, 
-                Math.min(rect.bottom, windowHeight) - Math.max(rect.top, 0)
-            ) / rect.height;
+            // Efeito de confirmação
+            const dot = this.querySelector('.cm-dot');
+            if (dot) {
+                dot.setAttribute('r', '8');
+                setTimeout(() => {
+                    dot.setAttribute('r', '3');
+                }, 300);
+            }
+        });
+        
+        // Touch events para mobile
+        zone.addEventListener('touchstart', function(e) {
+            e.preventDefault();
+            activateZone(this);
+        });
+        
+        zone.addEventListener('touchend', function() {
+            setTimeout(deactivateZone, 3000);
+        });
+        
+        // Acessibilidade
+        zone.setAttribute('tabindex', '0');
+        zone.setAttribute('role', 'button');
+        zone.setAttribute('aria-label', zone.getAttribute('data-name') || 'Comando Militar');
+        
+        zone.addEventListener('focus', function() {
+            activateZone(this);
+        });
+        
+        zone.addEventListener('blur', function() {
+            deactivateZone();
+        });
+        
+        zone.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                activateZone(this);
+            }
+        });
+    });
+    
+    // Fecha painel ao clicar fora do mapa
+    document.addEventListener('click', function(e) {
+        const mapContainer = document.querySelector('.map-war-container');
+        if (mapContainer && !mapContainer.contains(e.target)) {
+            deactivateZone();
+        }
+    });
+}
+
+// ============================================
+// 4. TIMELINE DE FORMAÇÃO COM SCROLL
+// ============================================
+function initTimeline() {
+    const timelineNodes = document.querySelectorAll('.timeline-node');
+    const progressBar = document.getElementById('timelineProgress');
+    
+    if (!timelineNodes.length) {
+        console.warn('[GORRO PESADO] Timeline: Nós não encontrados');
+        return;
+    }
+    
+    let ticking = false;
+    
+    /**
+     * Atualiza a barra de progresso e revela itens
+     */
+    function updateTimeline() {
+        const windowHeight = window.innerHeight;
+        const timelineContainer = document.querySelector('.timeline-war');
+        
+        if (!timelineContainer) return;
+        
+        const containerTop = timelineContainer.getBoundingClientRect().top;
+        const containerHeight = timelineContainer.offsetHeight;
+        
+        // Atualiza barra de progresso
+        if (progressBar) {
+            const scrollProgress = Math.max(0, Math.min(1, 
+                (windowHeight - containerTop) / (containerHeight + windowHeight)
+            ));
+            progressBar.style.height = (scrollProgress * 100) + '%';
+        }
+        
+        // Revela itens da timeline
+        timelineNodes.forEach((node, index) => {
+            const rect = node.getBoundingClientRect();
+            const nodeMiddle = rect.top + rect.height / 2;
             
-            if (visiblePortion > 0.3) {
-                item.classList.add('reveal');
+            if (nodeMiddle < windowHeight * 0.85 && nodeMiddle > -rect.height * 0.5) {
+                node.classList.add('reveal');
                 
-                // Efeito cascata baseado na posição
-                const delay = (rect.top / windowHeight) * 200;
-                item.style.transitionDelay = delay + 'ms';
-            } else {
-                item.classList.remove('reveal');
-                item.style.transitionDelay = '0ms';
+                // Delay em cascata
+                node.style.transitionDelay = (index * 0.1) + 's';
             }
         });
     }
     
     /**
-     * Handler de scroll otimizado com requestAnimationFrame
+     * Handler de scroll otimizado
      */
     function onScroll() {
-        lastScrollY = window.scrollY;
-        
         if (!ticking) {
-            window.requestAnimationFrame(() => {
-                updateScanBeam();
-                revealTimelineItems();
+            requestAnimationFrame(() => {
+                updateTimeline();
                 ticking = false;
             });
-            
             ticking = true;
         }
     }
     
-    // Adiciona listener de scroll
+    // Evento de scroll
     window.addEventListener('scroll', onScroll, { passive: true });
     
-    // Inicializa na carga
-    setTimeout(() => {
-        updateScanBeam();
-        revealTimelineItems();
-    }, 300);
+    // Verificação inicial
+    setTimeout(updateTimeline, 300);
     
     // Re-verifica em resize
-    window.addEventListener('resize', () => {
-        updateScanBeam();
-        revealTimelineItems();
+    window.addEventListener('resize', updateTimeline);
+    
+    // Re-verifica quando muda de seção
+    document.addEventListener('sectionChanged', () => {
+        setTimeout(updateTimeline, 400);
     });
 }
 
 // ============================================
-// 5. SISTEMA DE GALERIA COM FLIP
+// 5. GALERIA - ACERVO PESADO (ARRASQUE PARA VIRAR)
 // ============================================
-function initGallerySystem() {
-    const galleryCards = document.querySelectorAll('.gallery-card');
+function initGallery() {
+    const galleryItems = document.querySelectorAll('.gallery-item');
     
-    if (!galleryCards.length) {
-        console.warn('[SISCOMIS] Galeria: Cards não encontrados');
+    if (!galleryItems.length) {
+        console.warn('[GORRO PESADO] Galeria: Itens não encontrados');
         return;
     }
     
     /**
-     * Configura interações de arraste para cada card
+     * Configura interações de arraste para cada item
      */
-    galleryCards.forEach((card, index) => {
+    galleryItems.forEach((item, index) => {
+        const flipper = item.querySelector('.gallery-flipper');
+        if (!flipper) return;
+        
         let startX = 0;
         let startY = 0;
         let isDragging = false;
         let hasMoved = false;
-        const DRAG_THRESHOLD = 30;
+        let currentRotation = 0;
         
-        // Mouse Events
-        card.addEventListener('mousedown', function(e) {
+        const DRAG_THRESHOLD = 40;
+        
+        // ===== MOUSE EVENTS =====
+        flipper.addEventListener('mousedown', function(e) {
             startX = e.clientX;
             startY = e.clientY;
             isDragging = true;
             hasMoved = false;
-            card.style.cursor = 'grabbing';
-            card.style.transition = 'none';
+            
+            // Remove transição durante arraste
+            flipper.style.transition = 'none';
+            
+            // Se já estiver virado, começa de 180
+            currentRotation = item.classList.contains('flipped') ? 180 : 0;
+            
+            e.preventDefault();
         });
         
-        card.addEventListener('mousemove', function(e) {
+        document.addEventListener('mousemove', function(e) {
             if (!isDragging) return;
             
             const deltaX = e.clientX - startX;
@@ -556,54 +538,61 @@ function initGallerySystem() {
                 hasMoved = true;
             }
             
-            // Rotação 3D sutil durante o arraste
-            const rotateY = Math.max(-15, Math.min(15, deltaX * 0.5));
-            const rotateX = Math.max(-10, Math.min(10, -deltaY * 0.5));
+            // Rotação baseada no arraste horizontal
+            const rotationAmount = deltaX * 0.8;
+            let newRotation = currentRotation + rotationAmount;
             
-            card.querySelector('.gallery-card-inner').style.transform = 
-                `rotateY(${rotateY}deg) rotateX(${rotateX}deg)`;
+            // Limita a rotação
+            newRotation = Math.max(-30, Math.min(210, newRotation));
+            
+            flipper.style.transform = `rotateY(${newRotation}deg)`;
         });
         
-        card.addEventListener('mouseup', function(e) {
+        document.addEventListener('mouseup', function(e) {
             if (!isDragging) return;
             isDragging = false;
-            card.style.cursor = 'grab';
             
             const deltaX = e.clientX - startX;
             
-            // Restaura transformação
-            card.querySelector('.gallery-card-inner').style.transform = '';
-            card.style.transition = 'transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+            // Restaura transição
+            flipper.style.transition = 'transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
             
-            // Se arrastou horizontalmente o suficiente, faz o flip
+            // Decide se faz flip
             if (hasMoved && Math.abs(deltaX) > DRAG_THRESHOLD) {
-                card.classList.toggle('flipped');
-                
-                // Efeito sonoro tático (opcional)
-                playTacticalClick();
+                if (deltaX > 0 && !item.classList.contains('flipped')) {
+                    // Arrastou para direita - revela
+                    item.classList.add('flipped');
+                    flipper.style.transform = 'rotateY(180deg)';
+                    playFlipSound();
+                } else if (deltaX < 0 && item.classList.contains('flipped')) {
+                    // Arrastou para esquerda - esconde
+                    item.classList.remove('flipped');
+                    flipper.style.transform = 'rotateY(0deg)';
+                    playFlipSound();
+                } else {
+                    // Retorna ao estado original
+                    flipper.style.transform = item.classList.contains('flipped') ? 
+                        'rotateY(180deg)' : 'rotateY(0deg)';
+                }
+            } else {
+                // Retorna ao estado original
+                flipper.style.transform = item.classList.contains('flipped') ? 
+                    'rotateY(180deg)' : 'rotateY(0deg)';
             }
         });
         
-        card.addEventListener('mouseleave', function() {
-            if (isDragging) {
-                isDragging = false;
-                card.style.cursor = 'grab';
-                card.querySelector('.gallery-card-inner').style.transform = '';
-                card.style.transition = 'transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
-            }
-        });
-        
-        // Touch Events para mobile
-        card.addEventListener('touchstart', function(e) {
+        // ===== TOUCH EVENTS PARA MOBILE =====
+        flipper.addEventListener('touchstart', function(e) {
             const touch = e.touches[0];
             startX = touch.clientX;
             startY = touch.clientY;
             isDragging = true;
             hasMoved = false;
-            card.style.transition = 'none';
+            flipper.style.transition = 'none';
+            currentRotation = item.classList.contains('flipped') ? 180 : 0;
         }, { passive: false });
         
-        card.addEventListener('touchmove', function(e) {
+        flipper.addEventListener('touchmove', function(e) {
             if (!isDragging) return;
             
             const touch = e.touches[0];
@@ -612,161 +601,175 @@ function initGallerySystem() {
             
             if (Math.abs(deltaX) > 5 || Math.abs(deltaY) > 5) {
                 hasMoved = true;
-                e.preventDefault(); // Previne scroll durante arraste
+                if (Math.abs(deltaX) > Math.abs(deltaY)) {
+                    e.preventDefault(); // Previne scroll apenas em arraste horizontal
+                }
             }
             
-            const rotateY = Math.max(-15, Math.min(15, deltaX * 0.5));
-            card.querySelector('.gallery-card-inner').style.transform = 
-                `rotateY(${rotateY}deg)`;
+            const rotationAmount = deltaX * 0.8;
+            let newRotation = currentRotation + rotationAmount;
+            newRotation = Math.max(-30, Math.min(210, newRotation));
+            
+            flipper.style.transform = `rotateY(${newRotation}deg)`;
         }, { passive: false });
         
-        card.addEventListener('touchend', function(e) {
+        flipper.addEventListener('touchend', function(e) {
             if (!isDragging) return;
             isDragging = false;
             
             const touch = e.changedTouches[0];
             const deltaX = touch.clientX - startX;
             
-            card.querySelector('.gallery-card-inner').style.transform = '';
-            card.style.transition = 'transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+            flipper.style.transition = 'transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
             
             if (hasMoved && Math.abs(deltaX) > DRAG_THRESHOLD) {
-                card.classList.toggle('flipped');
-                playTacticalClick();
+                if (deltaX > 0 && !item.classList.contains('flipped')) {
+                    item.classList.add('flipped');
+                    flipper.style.transform = 'rotateY(180deg)';
+                    playFlipSound();
+                } else if (deltaX < 0 && item.classList.contains('flipped')) {
+                    item.classList.remove('flipped');
+                    flipper.style.transform = 'rotateY(0deg)';
+                    playFlipSound();
+                } else {
+                    flipper.style.transform = item.classList.contains('flipped') ? 
+                        'rotateY(180deg)' : 'rotateY(0deg)';
+                }
+            } else {
+                flipper.style.transform = item.classList.contains('flipped') ? 
+                    'rotateY(180deg)' : 'rotateY(0deg)';
             }
         });
         
-        // Suporte a teclado
-        card.setAttribute('tabindex', '0');
-        card.setAttribute('role', 'button');
-        card.setAttribute('aria-label', 'Imagem tática - arraste para revelar detalhes');
+        // ===== DUPLO CLIQUE PARA FLIP RÁPIDO =====
+        flipper.addEventListener('dblclick', function(e) {
+            e.preventDefault();
+            item.classList.toggle('flipped');
+            flipper.style.transition = 'transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+            flipper.style.transform = item.classList.contains('flipped') ? 
+                'rotateY(180deg)' : 'rotateY(0deg)';
+            playFlipSound();
+        });
         
-        card.addEventListener('keydown', function(e) {
+        // ===== TECLADO =====
+        flipper.setAttribute('tabindex', '0');
+        flipper.setAttribute('role', 'button');
+        flipper.setAttribute('aria-label', 'Imagem tática - arraste para revelar');
+        
+        flipper.addEventListener('keydown', function(e) {
             if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault();
-                card.classList.toggle('flipped');
-                playTacticalClick();
+                item.classList.toggle('flipped');
+                flipper.style.transition = 'transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+                flipper.style.transform = item.classList.contains('flipped') ? 
+                    'rotateY(180deg)' : 'rotateY(0deg)';
+                playFlipSound();
             }
         });
     });
     
     /**
-     * Simula um clique tático (feedback visual)
+     * Feedback sonoro visual (simulado)
      */
-    function playTacticalClick() {
-        // Cria um efeito visual de confirmação
-        const indicator = document.createElement('div');
-        indicator.className = 'tactical-click-indicator';
-        indicator.style.cssText = `
+    function playFlipSound() {
+        // Cria um flash visual como feedback
+        const flash = document.createElement('div');
+        flash.style.cssText = `
             position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 40px;
+            height: 40px;
+            border: 3px solid #d4b020;
+            transform: translate(-50%, -50%) rotate(45deg);
             pointer-events: none;
-            width: 20px;
-            height: 20px;
-            border: 2px solid #00ff41;
-            border-radius: 50%;
-            animation: tacticalPop 0.4s ease-out forwards;
-            z-index: 9999;
+            z-index: 300;
+            animation: flipFlash 0.4s ease-out forwards;
         `;
         
-        document.body.appendChild(indicator);
+        document.body.appendChild(flash);
         
         setTimeout(() => {
-            indicator.remove();
+            flash.remove();
         }, 400);
     }
 }
 
 // ============================================
-// 6. SISTEMA DE GLITCH NOS DESAFIOS
+// 6. GLITCH NOS DESAFIOS
 // ============================================
 function initDesafiosGlitch() {
     const desafioCards = document.querySelectorAll('[data-glitch]');
     
     if (!desafioCards.length) {
-        console.warn('[SISCOMIS] Desafios: Cards não encontrados');
+        console.warn('[GORRO PESADO] Desafios: Cards não encontrados');
         return;
     }
     
     let glitchInterval;
-    let isGlitching = false;
     
     /**
-     * Aplica efeito glitch em um card específico
+     * Aplica efeito de glitch em um card
      */
-    function applyGlitch(card) {
-        if (isGlitching) return;
+    function glitchCard(card) {
+        card.classList.add('glitch-active');
         
-        const originalTransform = card.style.transform;
-        const originalFilter = card.style.filter;
+        // Texto glitch
+        const originalText = card.querySelector('p').textContent;
+        const glitchChars = '!@#$%&*()_+-=[]{}|;:,.<>?/';
         
-        // Sequência de glitch
-        const glitchSequence = [
-            { transform: 'translate(2px, 0) skew(0deg)', filter: 'hue-rotate(90deg) brightness(1.2)', duration: 50 },
-            { transform: 'translate(-2px, 0) skew(2deg)', filter: 'hue-rotate(-90deg) brightness(0.9)', duration: 50 },
-            { transform: 'translate(1px, -1px) skew(-1deg)', filter: 'hue-rotate(45deg) brightness(1.1)', duration: 40 },
-            { transform: 'translate(-1px, 1px) skew(1deg)', filter: 'hue-rotate(-45deg) brightness(1)', duration: 40 },
-            { transform: 'translate(3px, 0) skew(3deg)', filter: 'hue-rotate(180deg) brightness(1.3)', duration: 30 },
-            { transform: 'translate(0, 0) skew(0)', filter: 'none', duration: 60 }
-        ];
-        
-        let totalDelay = 0;
-        
-        glitchSequence.forEach(step => {
-            setTimeout(() => {
-                card.style.transform = step.transform;
-                card.style.filter = step.filter;
-            }, totalDelay);
+        // Substitui alguns caracteres aleatoriamente
+        if (card.querySelector('p')) {
+            const p = card.querySelector('p');
+            let glitchedText = '';
+            for (let i = 0; i < originalText.length; i++) {
+                if (Math.random() < 0.08) {
+                    glitchedText += glitchChars[Math.floor(Math.random() * glitchChars.length)];
+                } else {
+                    glitchedText += originalText[i];
+                }
+            }
+            p.textContent = glitchedText;
             
-            totalDelay += step.duration;
-        });
-        
-        // Restaura estado original
-        setTimeout(() => {
-            card.style.transform = originalTransform;
-            card.style.filter = originalFilter;
-        }, totalDelay + 50);
-    }
-    
-    /**
-     * Executa glitch em todos os cards
-     */
-    function glitchAllCards() {
-        if (isGlitching) return;
-        isGlitching = true;
-        
-        desafioCards.forEach((card, index) => {
+            // Restaura texto original
             setTimeout(() => {
-                applyGlitch(card);
-            }, index * 100); // Stagger effect
-        });
-        
-        setTimeout(() => {
-            isGlitching = false;
-        }, desafioCards.length * 100 + 300);
-    }
-    
-    /**
-     * Inicia o ciclo de glitch automático
-     */
-    function startGlitchCycle() {
-        // Limpa intervalo existente
-        if (glitchInterval) {
-            clearInterval(glitchInterval);
+                p.textContent = originalText;
+            }, 200);
         }
         
-        // Primeiro glitch após 3 segundos
+        // Remove classe após animação
         setTimeout(() => {
-            glitchAllCards();
-            
-            // Ciclo a cada 5 segundos
-            glitchInterval = setInterval(() => {
-                glitchAllCards();
-            }, 5000);
-        }, 3000);
+            card.classList.remove('glitch-active');
+        }, 400);
     }
     
     /**
-     * Para o ciclo de glitch
+     * Executa glitch em todos os cards com stagger
+     */
+    function glitchAllCards() {
+        desafioCards.forEach((card, index) => {
+            setTimeout(() => {
+                glitchCard(card);
+            }, index * 150);
+        });
+    }
+    
+    /**
+     * Inicia ciclo automático de glitch
+     */
+    function startGlitchCycle() {
+        if (glitchInterval) clearInterval(glitchInterval);
+        
+        // Primeiro glitch após 4 segundos
+        setTimeout(() => {
+            glitchAllCards();
+            // Ciclo a cada 6 segundos
+            glitchInterval = setInterval(glitchAllCards, 6000);
+        }, 4000);
+    }
+    
+    /**
+     * Para ciclo de glitch
      */
     function stopGlitchCycle() {
         if (glitchInterval) {
@@ -775,10 +778,10 @@ function initDesafiosGlitch() {
         }
     }
     
-    // Inicia o ciclo
+    // Inicia ciclo
     startGlitchCycle();
     
-    // Pausa quando a página não está visível
+    // Pausa quando página não está visível
     document.addEventListener('visibilitychange', () => {
         if (document.hidden) {
             stopGlitchCycle();
@@ -787,17 +790,18 @@ function initDesafiosGlitch() {
         }
     });
     
-    // Adiciona hover effect que cancela glitch naquele card
+    // Hover nos cards
     desafioCards.forEach(card => {
         card.addEventListener('mouseenter', function() {
-            this.style.transition = 'all 0.15s ease';
-            this.style.borderColor = 'var(--amber-alert)';
-            this.style.boxShadow = '0 0 20px rgba(255, 140, 0, 0.4)';
+            this.style.transform = 'translateY(-5px)';
+            this.style.boxShadow = '8px 12px 0 rgba(0,0,0,0.7)';
+            this.style.borderColor = '#d4b020';
         });
         
         card.addEventListener('mouseleave', function() {
-            this.style.borderColor = 'rgba(255, 140, 0, 0.4)';
-            this.style.boxShadow = 'none';
+            this.style.transform = 'translateY(0)';
+            this.style.boxShadow = '8px 8px 0 rgba(0,0,0,0.6)';
+            this.style.borderColor = '#6b8c42';
         });
     });
 }
@@ -805,176 +809,142 @@ function initDesafiosGlitch() {
 // ============================================
 // 7. CONSOLE DE STATUS AO VIVO
 // ============================================
-function initLiveConsole() {
+function initStatusConsole() {
     const consoleLine1 = document.getElementById('consoleLine1');
     const consoleLine2 = document.getElementById('consoleLine2');
-    const consoleLine3 = document.getElementById('consoleLine3');
     
-    if (!consoleLine1 || !consoleLine2 || !consoleLine3) {
-        console.warn('[SISCOMIS] Console: Elementos não encontrados');
+    if (!consoleLine1 || !consoleLine2) {
+        console.warn('[GORRO PESADO] Console: Elementos não encontrados');
         return;
     }
     
     /**
-     * Mensagens do console de status
+     * Mensagens do console tático
      */
-    const statusMessages = [
-        '> SISCOMIS: Link Verde - Conexão Estabelecida',
-        '> Bda Inf Pqdt: Prontidão 48h - Status Operacional',
-        '> Conexão com CIGS: Estável - Selva Monitorada',
-        '> CAvEx: Alerta 3 - Mobilidade Tática Ativa',
-        '> 1º BFEsp: Sincronizado - Canal Seguro',
-        '> PPIF: Monitorando Fronteira - Setor Norte',
-        '> MINUSTAH: Dados Históricos - Missão Encerrada',
-        '> COTER: Comando Geral - Operações Normais',
-        '> CML: Forças Estratégicas - Prontas',
-        '> CMA: Fronteira Amazônica - Vigilância Ativa',
+    const messages = [
+        '> SISCOMIS: Link Estável - Conexão Estabelecida',
+        '> Bda Inf Pqdt: Prontidão 48h - Status Verde',
+        '> CAvEx: Mobilidade Tática - Alerta 3',
+        '> C Op Esp: Canal Seguro - Operações Normais',
+        '> CIGS: Monitoramento de Selva - Ativo',
+        '> PPIF: Vigilância de Fronteira - Setor Norte',
+        '> COTER: Comando Geral - Todas Unidades Prontas',
+        '> CMA: Fronteira Amazônica - Patrulha em Curso',
+        '> CML: Forças Estratégicas - Posicionadas',
         '> CMSE: Estrutura Industrial - Operacional',
-        '> CMO: Pantanal - Patrulha em Curso',
-        '> CMS: Fronteira Sul - Monitoramento',
-        '> CMN: Amazônia Oriental - Defesa Ativa',
+        '> CMS: Fronteira Sul - Monitoramento Contínuo',
+        '> CMO: Pantanal - Destacamento Ativo',
+        '> CMN: Amazônia Oriental - Defesa Reforçada',
         '> CMNE: Segurança Regional - GLO Disponível',
-        '> CMP: Capital Federal - Proteção Reforçada',
-        '> CIOpEsp: Operadores Especiais - Em Adestramento',
-        '> ESA: Formação de Sargentos - Turma Atual',
-        '> AMAN: Cadetes - Instrução em Andamento',
-        '> CIB: Comunicações - Criptografia AES-256',
+        '> CMP: Capital Federal - Proteção Máxima',
+        '> CIOpEsp: Operadores - Adestramento Concluído',
+        '> ESA: Formação de Sargentos - Em Andamento',
+        '> AMAN: Cadetes - Instrução Tática',
+        '> COM: Criptografia AES-256 - Ativa',
         '> LOG: Suprimentos - Níveis Adequados',
-        '> MED: Evacuação Aeromédica - Disponível',
-        '> INTEL: Inteligência - Relatórios Atualizados',
-        '> SAT: Link Satélite - Sinal Forte',
-        '> DRONE: Reconhecimento Aéreo - Em Operação'
+        '> MED: Evacuação Aeromédica - Pronta',
+        '> INTEL: Relatórios Atualizados - Última Hora',
+        '> SAT: Link Satélite - Sinal Ótimo',
+        '> DRONE: Reconhecimento - Em Operação'
     ];
     
-    let messageIndex1 = 0;
-    let messageIndex2 = 5;
-    let messageIndex3 = 10;
+    let currentLine1Index = 0;
+    let currentLine2Index = 12;
     let charIndex1 = 0;
     let charIndex2 = 0;
-    let charIndex3 = 0;
     let isTyping1 = false;
     let isTyping2 = false;
-    let isTyping3 = false;
     
     /**
-     * Efeito de digitação para uma linha
+     * Efeito de digitação máquina de escrever
      */
-    function typeLine(lineElement, message, charIndex, callback) {
-        if (charIndex < message.length) {
-            lineElement.textContent = message.substring(0, charIndex + 1) + '█';
-            
-            // Velocidade variável para realismo
-            const delay = Math.random() * 30 + 20;
-            
-            setTimeout(() => {
-                typeLine(lineElement, message, charIndex + 1, callback);
-            }, delay);
-        } else {
-            lineElement.textContent = message;
-            if (callback) callback();
+    function typeMessage(lineElement, message, callback) {
+        let index = 0;
+        lineElement.textContent = '> _';
+        
+        function type() {
+            if (index < message.length) {
+                lineElement.textContent = message.substring(0, index + 1) + '_';
+                index++;
+                setTimeout(type, 30 + Math.random() * 20);
+            } else {
+                lineElement.textContent = message;
+                if (callback) {
+                    setTimeout(callback, 2500 + Math.random() * 1500);
+                }
+            }
         }
+        
+        type();
     }
     
     /**
      * Ciclo de mensagens para uma linha
      */
-    function cycleMessage(lineElement, messageIndexRef, isTypingRef) {
-        return function() {
+    function cycleLine(lineElement, messageIndexRef, isTypingRef, otherLineElement, otherMessageIndexRef) {
+        return function executeCycle() {
             if (isTypingRef) return;
             isTypingRef = true;
             
-            const message = statusMessages[messageIndexRef];
+            const message = messages[messageIndexRef];
             
-            // Efeito de apagar
-            const currentText = lineElement.textContent;
-            if (currentText && currentText !== '> ') {
-                let eraseIndex = currentText.length;
-                
-                function eraseText() {
-                    if (eraseIndex > 2) {
-                        lineElement.textContent = currentText.substring(0, eraseIndex - 1) + '█';
-                        eraseIndex--;
-                        setTimeout(eraseText, 15);
-                    } else {
-                        lineElement.textContent = '> █';
-                        setTimeout(() => {
-                            typeLine(lineElement, message, 0, () => {
-                                isTypingRef = false;
-                                
-                                // Próxima mensagem após pausa
-                                setTimeout(() => {
-                                    messageIndexRef = (messageIndexRef + 3) % statusMessages.length;
-                                    cycleMessage(lineElement, messageIndexRef, isTypingRef)();
-                                }, 2500 + Math.random() * 2000);
-                            });
-                        }, 200);
-                    }
-                }
-                
-                eraseText();
-            } else {
-                typeLine(lineElement, message, 0, () => {
-                    isTypingRef = false;
-                    
-                    setTimeout(() => {
-                        messageIndexRef = (messageIndexRef + 3) % statusMessages.length;
-                        cycleMessage(lineElement, messageIndexRef, isTypingRef)();
-                    }, 2500 + Math.random() * 2000);
-                });
+            // Evita mesma mensagem que a outra linha
+            if (messageIndexRef === otherMessageIndexRef) {
+                messageIndexRef = (messageIndexRef + 1) % messages.length;
             }
+            
+            typeMessage(lineElement, message, () => {
+                isTypingRef = false;
+                messageIndexRef = (messageIndexRef + 1) % messages.length;
+                executeCycle();
+            });
         };
     }
     
-    // Inicia as três linhas com delays diferentes
-    setTimeout(() => {
-        cycleMessage(consoleLine1, messageIndex1, isTyping1)();
-    }, 500);
+    // Inicia as duas linhas
+    const cycle1 = cycleLine(consoleLine1, currentLine1Index, isTyping1, consoleLine2, currentLine2Index);
+    const cycle2 = cycleLine(consoleLine2, currentLine2Index, isTyping2, consoleLine1, currentLine1Index);
     
-    setTimeout(() => {
-        cycleMessage(consoleLine2, messageIndex2, isTyping2)();
-    }, 2000);
-    
-    setTimeout(() => {
-        cycleMessage(consoleLine3, messageIndex3, isTyping3)();
-    }, 3500);
+    setTimeout(cycle1, 500);
+    setTimeout(cycle2, 2500);
 }
 
 // ============================================
-// 8. CANVAS DE PARTÍCULAS RADAR
+// 8. CANVAS DE PARTÍCULAS DE POEIRA
 // ============================================
-function initRadarCanvas() {
-    const canvas = document.getElementById('radarCanvas');
+function initDustCanvas() {
+    const canvas = document.getElementById('dustCanvas');
     if (!canvas) {
-        console.warn('[SISCOMIS] Radar Canvas: Não encontrado');
+        console.warn('[GORRO PESADO] Dust Canvas: Não encontrado');
         return;
     }
     
     const ctx = canvas.getContext('2d');
     let animationId;
     let particles = [];
-    const MAX_PARTICLES = 50;
+    const MAX_PARTICLES = 40;
     
     /**
-     * Redimensiona o canvas
+     * Redimensiona canvas
      */
-    function resizeCanvas() {
+    function resize() {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
     }
     
     /**
-     * Cria uma partícula
+     * Cria partícula de poeira
      */
     function createParticle() {
         return {
             x: Math.random() * canvas.width,
             y: Math.random() * canvas.height,
-            size: Math.random() * 2 + 1,
-            speedX: (Math.random() - 0.5) * 0.5,
-            speedY: (Math.random() - 0.5) * 0.5,
-            life: Math.random() * 200 + 100,
-            maxLife: 300,
-            opacity: Math.random() * 0.5 + 0.2
+            size: Math.random() * 2 + 0.5,
+            speedX: (Math.random() - 0.5) * 0.3,
+            speedY: (Math.random() - 0.5) * 0.3 - 0.2, // Tendência a subir
+            opacity: Math.random() * 0.3 + 0.1,
+            life: Math.random() * 300 + 200,
+            maxLife: 500
         };
     }
     
@@ -989,98 +959,69 @@ function initRadarCanvas() {
     }
     
     /**
-     * Desenha o radar
+     * Anima partículas
      */
-    function drawRadar() {
+    function animate() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         
-        // Desenha grade de radar
-        ctx.strokeStyle = 'rgba(0, 255, 65, 0.05)';
-        ctx.lineWidth = 0.5;
-        
-        const gridSize = 60;
-        for (let x = 0; x < canvas.width; x += gridSize) {
-            ctx.beginPath();
-            ctx.moveTo(x, 0);
-            ctx.lineTo(x, canvas.height);
-            ctx.stroke();
-        }
-        
-        for (let y = 0; y < canvas.height; y += gridSize) {
-            ctx.beginPath();
-            ctx.moveTo(0, y);
-            ctx.lineTo(canvas.width, y);
-            ctx.stroke();
-        }
-        
-        // Desenha círculos concêntricos
-        const centerX = canvas.width / 2;
-        const centerY = canvas.height / 2;
-        const maxRadius = Math.sqrt(centerX * centerX + centerY * centerY);
-        
-        for (let r = 100; r < maxRadius; r += 100) {
-            ctx.beginPath();
-            ctx.arc(centerX, centerY, r, 0, Math.PI * 2);
-            ctx.strokeStyle = 'rgba(0, 255, 65, 0.08)';
-            ctx.stroke();
-        }
-        
-        // Atualiza e desenha partículas
         particles.forEach((particle, index) => {
+            // Movimento
             particle.x += particle.speedX;
             particle.y += particle.speedY;
             particle.life--;
             
-            // Wrap around
-            if (particle.x < 0) particle.x = canvas.width;
-            if (particle.x > canvas.width) particle.x = 0;
-            if (particle.y < 0) particle.y = canvas.height;
-            if (particle.y > canvas.height) particle.y = 0;
+            // Wrap horizontal
+            if (particle.x < -10) particle.x = canvas.width + 10;
+            if (particle.x > canvas.width + 10) particle.x = -10;
             
-            // Respawn quando vida acaba
-            if (particle.life <= 0) {
+            // Respawn quando sai da tela ou vida acaba
+            if (particle.y < -20 || particle.y > canvas.height + 20 || particle.life <= 0) {
                 particles[index] = createParticle();
+                particles[index].y = canvas.height + 10; // Começa de baixo
                 return;
             }
             
+            // Opacidade baseada na vida
+            const lifeRatio = particle.life / particle.maxLife;
+            const currentOpacity = particle.opacity * lifeRatio;
+            
             // Desenha partícula
-            const opacity = (particle.life / particle.maxLife) * particle.opacity;
             ctx.beginPath();
             ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(0, 255, 65, ${opacity})`;
+            ctx.fillStyle = `rgba(139, 125, 107, ${currentOpacity})`;
             ctx.fill();
             
-            // Linha de rastro
+            // Rastro sutil
             ctx.beginPath();
             ctx.moveTo(particle.x, particle.y);
             ctx.lineTo(
-                particle.x - particle.speedX * 20,
-                particle.y - particle.speedY * 20
+                particle.x - particle.speedX * 10,
+                particle.y - particle.speedY * 10
             );
-            ctx.strokeStyle = `rgba(0, 255, 65, ${opacity * 0.3})`;
+            ctx.strokeStyle = `rgba(139, 125, 107, ${currentOpacity * 0.2})`;
             ctx.lineWidth = 0.5;
             ctx.stroke();
         });
         
-        animationId = requestAnimationFrame(drawRadar);
+        animationId = requestAnimationFrame(animate);
     }
     
     // Inicialização
-    resizeCanvas();
+    resize();
     initParticles();
-    drawRadar();
+    animate();
     
-    // Redimensiona com debounce
+    // Redimensionamento
     let resizeTimeout;
     window.addEventListener('resize', () => {
         clearTimeout(resizeTimeout);
         resizeTimeout = setTimeout(() => {
-            resizeCanvas();
+            resize();
             initParticles();
-        }, 200);
+        }, 300);
     });
     
-    // Para animação quando página não está visível
+    // Pausa quando invisível
     document.addEventListener('visibilitychange', () => {
         if (document.hidden) {
             if (animationId) {
@@ -1089,343 +1030,355 @@ function initRadarCanvas() {
             }
         } else {
             if (!animationId) {
-                drawRadar();
+                animate();
             }
         }
     });
 }
 
 // ============================================
-// 9. RELÓGIO ZULU
+// 9. LIGHTBOX PARA IMAGENS
 // ============================================
-function initClock() {
-    const clockElement = document.querySelector('.clock-time');
-    if (!clockElement) return;
+function initLightbox() {
+    const lightbox = document.getElementById('lightboxOverlay');
+    const lightboxImg = document.getElementById('lightboxImg');
+    const lightboxDesc = document.getElementById('lightboxDesc');
+    const lightboxClose = document.querySelector('.lightbox-close');
+    const galleryImages = document.querySelectorAll('.gallery-front img');
+    
+    if (!lightbox || !lightboxImg) return;
     
     /**
-     * Atualiza o relógio
+     * Abre lightbox
      */
-    function updateClock() {
-        const now = new Date();
-        const hours = String(now.getUTCHours()).padStart(2, '0');
-        const minutes = String(now.getUTCMinutes()).padStart(2, '0');
-        const seconds = String(now.getUTCSeconds()).padStart(2, '0');
+    function openLightbox(imgElement) {
+        const galleryItem = imgElement.closest('.gallery-item');
+        const desc = galleryItem ? galleryItem.getAttribute('data-desc') : '';
         
-        clockElement.textContent = `${hours}:${minutes}:${seconds}`;
-    }
-    
-    // Atualiza imediatamente
-    updateClock();
-    
-    // Atualiza a cada segundo
-    setInterval(updateClock, 1000);
-}
-
-// ============================================
-// 10. OVERLAY DE GLITCH
-// ============================================
-function initGlitchOverlay() {
-    const glitchOverlay = document.getElementById('globalGlitch');
-    if (!glitchOverlay) return;
-    
-    /**
-     * Dispara um glitch rápido
-     */
-    window.triggerQuickGlitch = function() {
-        if (!glitchOverlay) return;
-        
-        glitchOverlay.classList.add('active');
-        
-        setTimeout(() => {
-            glitchOverlay.classList.remove('active');
-        }, 150);
-    };
-    
-    // Glitch aleatório ocasional
-    function randomGlitch() {
-        if (Math.random() < 0.1) { // 10% de chance
-            triggerQuickGlitch();
+        lightboxImg.src = imgElement.src;
+        lightboxImg.alt = imgElement.alt;
+        if (lightboxDesc) {
+            lightboxDesc.textContent = desc;
         }
         
-        setTimeout(randomGlitch, 3000 + Math.random() * 7000);
-    }
-    
-    setTimeout(randomGlitch, 5000);
-}
-
-// ============================================
-// 11. COMANDOS RÁPIDOS
-// ============================================
-function initQuickCommands() {
-    const btnRefresh = document.getElementById('btnRefresh');
-    const btnDarkMode = document.getElementById('btnDarkMode');
-    const btnCrypto = document.getElementById('btnCrypto');
-    const btnFullscreen = document.getElementById('btnFullscreen');
-    
-    /**
-     * Botão Refresh - Recarrega dados
-     */
-    if (btnRefresh) {
-        btnRefresh.addEventListener('click', function() {
-            triggerQuickGlitch();
-            
-            // Animação de rotação
-            const icon = this.querySelector('.cmd-icon');
-            if (icon) {
-                icon.style.transition = 'transform 0.6s ease';
-                icon.style.transform = 'rotate(360deg)';
-                setTimeout(() => {
-                    icon.style.transform = 'rotate(0deg)';
-                }, 600);
-            }
-            
-            // Feedback visual
-            showNotification('SISTEMA ATUALIZADO', 'success');
-        });
+        lightbox.classList.add('active');
+        document.body.style.overflow = 'hidden';
     }
     
     /**
-     * Botão Dark Mode - Alterna tema
+     * Fecha lightbox
      */
-    if (btnDarkMode) {
-        btnDarkMode.addEventListener('click', function() {
-            document.body.classList.toggle('light-mode');
-            
-            const isLight = document.body.classList.contains('light-mode');
-            showNotification(
-                isLight ? 'MODO CLARO ATIVADO' : 'MODO ESCURO ATIVADO',
-                'info'
-            );
-        });
+    function closeLightbox() {
+        lightbox.classList.remove('active');
+        document.body.style.overflow = '';
+        lightboxImg.src = '';
     }
     
-    /**
-     * Botão Crypto - Status de criptografia
-     */
-    if (btnCrypto) {
-        btnCrypto.addEventListener('click', function() {
-            showNotification('CRIPTOGRAFIA AES-256 • CANAL SEGURO', 'secure');
+    // Eventos nas imagens da galeria
+    galleryImages.forEach(img => {
+        img.addEventListener('click', function(e) {
+            e.stopPropagation();
+            openLightbox(this);
         });
+        
+        img.style.cursor = 'zoom-in';
+    });
+    
+    // Também nas imagens fallback
+    document.querySelectorAll('.gallery-fallback').forEach(fallback => {
+        fallback.addEventListener('click', function(e) {
+            e.stopPropagation();
+            // Não abre lightbox para fallback
+        });
+    });
+    
+    // Fechar lightbox
+    if (lightboxClose) {
+        lightboxClose.addEventListener('click', closeLightbox);
     }
     
-    /**
-     * Botão Fullscreen
-     */
-    if (btnFullscreen) {
-        btnFullscreen.addEventListener('click', function() {
-            if (document.fullscreenElement) {
-                document.exitFullscreen();
-                showNotification('MODO TELA CHEIA DESATIVADO', 'info');
-            } else {
-                document.documentElement.requestFullscreen();
-                showNotification('MODO TELA CHEIA ATIVADO', 'info');
-            }
-        });
-    }
-}
-
-// ============================================
-// 12. ATALHOS DE TECLADO
-// ============================================
-function initKeyboardShortcuts() {
+    lightbox.addEventListener('click', function(e) {
+        if (e.target === lightbox) {
+            closeLightbox();
+        }
+    });
+    
+    // Tecla ESC para fechar
     document.addEventListener('keydown', function(e) {
-        // Ignora se estiver em um input
-        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+        if (e.key === 'Escape' && lightbox.classList.contains('active')) {
+            closeLightbox();
+        }
+    });
+}
+
+// ============================================
+// 10. BOTÕES RÁPIDOS DO HEADER
+// ============================================
+function initQuickButtons() {
+    const qlBtns = document.querySelectorAll('.ql-btn');
+    
+    qlBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const action = this.getAttribute('data-action');
+            
+            switch(action) {
+                case 'alerta':
+                    triggerAlertEffect();
+                    break;
+                case 'coms':
+                    showComsStatus();
+                    break;
+                case 'info':
+                    scrollToInfo();
+                    break;
+            }
+        });
+    });
+    
+    /**
+     * Efeito de alerta
+     */
+    function triggerAlertEffect() {
+        const statusStrip = document.querySelector('.status-strip');
+        if (statusStrip) {
+            statusStrip.style.background = 'rgba(139, 26, 26, 0.6)';
+            statusStrip.style.transform = 'scale(1.05)';
+            
+            setTimeout(() => {
+                statusStrip.style.background = 'rgba(139, 26, 26, 0.2)';
+                statusStrip.style.transform = 'scale(1)';
+            }, 500);
+        }
+        
+        // Pisca a tela
+        const overlay = document.querySelector('.vignette-overlay');
+        if (overlay) {
+            overlay.style.background = 'radial-gradient(ellipse at center, transparent 50%, rgba(139, 26, 26, 0.4) 100%)';
+            setTimeout(() => {
+                overlay.style.background = 'radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.7) 100%)';
+            }, 300);
+        }
+    }
+    
+    /**
+     * Status de comunicações
+     */
+    function showComsStatus() {
+        const consoleDiv = document.getElementById('statusConsole');
+        if (consoleDiv) {
+            consoleDiv.style.transform = 'scale(1.05)';
+            consoleDiv.style.borderColor = '#d4b020';
+            
+            setTimeout(() => {
+                consoleDiv.style.transform = 'scale(1)';
+                consoleDiv.style.borderColor = '#6b8c42';
+            }, 400);
+        }
+    }
+    
+    /**
+     * Scroll para informações
+     */
+    function scrollToInfo() {
+        const footer = document.querySelector('.war-footer');
+        if (footer) {
+            footer.scrollIntoView({ behavior: 'smooth' });
+        }
+    }
+}
+
+// ============================================
+// 11. COMANDOS DE TECLADO
+// ============================================
+function initKeyboardCommands() {
+    document.addEventListener('keydown', function(e) {
+        // Ignora inputs
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || 
+            e.target.isContentEditable) return;
         
         switch(e.key) {
             case '1':
-                navigateToSection('estrategicas');
+                navigateTo('estrategicas');
                 break;
             case '2':
-                navigateToSection('comandos');
+                navigateTo('comandos');
                 break;
             case '3':
-                navigateToSection('formacao');
+                navigateTo('formacao');
                 break;
             case '4':
-                navigateToSection('galeria');
+                navigateTo('galeria');
                 break;
             case '5':
-                navigateToSection('desafios');
-                break;
-            case 'Escape':
-                // Fecha qualquer overlay aberto
-                document.querySelectorAll('.active').forEach(el => {
-                    if (el.classList.contains('modal') || el.classList.contains('overlay')) {
-                        el.classList.remove('active');
-                    }
-                });
+                navigateTo('desafios');
                 break;
             case 'f':
+            case 'F':
                 if (e.ctrlKey) {
                     e.preventDefault();
-                    // Toggle fullscreen
-                    if (document.fullscreenElement) {
-                        document.exitFullscreen();
-                    } else {
-                        document.documentElement.requestFullscreen();
-                    }
+                    toggleFullscreen();
                 }
+                break;
+            case 'Escape':
+                closeAllModals();
+                break;
+            case 'ArrowUp':
+                e.preventDefault();
+                window.scrollBy({ top: -100, behavior: 'smooth' });
+                break;
+            case 'ArrowDown':
+                e.preventDefault();
+                window.scrollBy({ top: 100, behavior: 'smooth' });
                 break;
         }
     });
     
-    function navigateToSection(sectionName) {
-        const link = document.querySelector(`.nav-link[data-section="${sectionName}"]`);
-        if (link) {
-            link.click();
+    function navigateTo(section) {
+        const tab = document.querySelector(`.muscle-tab[data-target="${section}"]`);
+        if (tab) {
+            tab.click();
+        }
+    }
+    
+    function toggleFullscreen() {
+        if (document.fullscreenElement) {
+            document.exitFullscreen();
+        } else {
+            document.documentElement.requestFullscreen().catch(() => {});
+        }
+    }
+    
+    function closeAllModals() {
+        const lightbox = document.getElementById('lightboxOverlay');
+        if (lightbox && lightbox.classList.contains('active')) {
+            lightbox.classList.remove('active');
+            document.body.style.overflow = '';
         }
     }
 }
 
 // ============================================
-// 13. NOTIFICAÇÕES DO SISTEMA
+// 12. UTILITÁRIOS GLOBAIS
 // ============================================
-function showNotification(message, type = 'info') {
-    // Remove notificações existentes
-    document.querySelectorAll('.system-notification').forEach(n => n.remove());
+/**
+ * Trigger screen shake global
+ */
+window.triggerScreenShake = function(intensity = 3) {
+    const container = document.querySelector('.war-container');
+    if (!container) return;
     
+    const shakeSequence = [
+        { x: intensity, y: 0 },
+        { x: -intensity, y: 0 },
+        { x: intensity / 2, y: -intensity / 2 },
+        { x: -intensity / 2, y: intensity / 2 },
+        { x: 0, y: 0 }
+    ];
+    
+    let delay = 0;
+    shakeSequence.forEach(pos => {
+        setTimeout(() => {
+            container.style.transform = `translate(${pos.x}px, ${pos.y}px)`;
+        }, delay);
+        delay += 40;
+    });
+};
+
+/**
+ * Notificação tática
+ */
+window.tacticalNotify = function(message, type = 'info') {
     const notification = document.createElement('div');
-    notification.className = 'system-notification';
-    notification.setAttribute('data-type', type);
-    notification.textContent = message;
-    
-    // Estilos inline para a notificação
     notification.style.cssText = `
         position: fixed;
         top: 20px;
         right: 20px;
-        z-index: 10000;
-        padding: 12px 20px;
-        font-family: 'JetBrains Mono', monospace;
-        font-size: 0.75rem;
-        letter-spacing: 1px;
-        background: rgba(5, 10, 5, 0.95);
-        border: 1px solid #00ff41;
-        color: #00ff41;
-        box-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
-        animation: slideInNotification 0.3s ease;
-        max-width: 400px;
+        z-index: 500;
+        padding: 15px 25px;
+        font-family: 'Oswald', sans-serif;
+        font-size: 0.85rem;
+        letter-spacing: 2px;
+        background: #1a1a14;
+        border: 2px solid ${type === 'alert' ? '#8b1a1a' : '#6b8c42'};
+        color: ${type === 'alert' ? '#ff8888' : '#a89880'};
+        box-shadow: 8px 8px 0 rgba(0,0,0,0.6);
+        animation: slideInRight 0.3s ease;
     `;
-    
-    if (type === 'success') {
-        notification.style.borderColor = '#00ff41';
-    } else if (type === 'secure') {
-        notification.style.borderColor = '#ff8c00';
-        notification.style.color = '#ff8c00';
-    }
+    notification.textContent = message;
     
     document.body.appendChild(notification);
     
-    // Remove após 3 segundos
     setTimeout(() => {
-        notification.style.animation = 'slideOutNotification 0.3s ease forwards';
-        setTimeout(() => {
-            notification.remove();
-        }, 300);
-    }, 3000);
-}
-
-// ============================================
-// 14. SCROLL SUAVE
-// ============================================
-function initSmoothScroll() {
-    // Scroll suave para links internos
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function(e) {
-            const target = document.querySelector(this.getAttribute('href'));
-            if (target) {
-                e.preventDefault();
-                target.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                });
-            }
-        });
-    });
-}
-
-// ============================================
-// 15. OTIMIZAÇÕES DE PERFORMANCE
-// ============================================
-function initPerformanceOptimizations() {
-    // Debounce para funções pesadas
-    function debounce(func, wait) {
-        let timeout;
-        return function executedFunction(...args) {
-            const later = () => {
-                clearTimeout(timeout);
-                func(...args);
-            };
-            clearTimeout(timeout);
-            timeout = setTimeout(later, wait);
-        };
-    }
-    
-    // Throttle para eventos de scroll
-    function throttle(func, limit) {
-        let inThrottle;
-        return function(...args) {
-            if (!inThrottle) {
-                func.apply(this, args);
-                inThrottle = true;
-                setTimeout(() => inThrottle = false, limit);
-            }
-        };
-    }
-    
-    // Lazy loading para imagens
-    if ('loading' in HTMLImageElement.prototype) {
-        document.querySelectorAll('img[loading="lazy"]').forEach(img => {
-            img.src = img.dataset.src || img.src;
-        });
-    } else {
-        // Fallback para navegadores antigos
-        const script = document.createElement('script');
-        script.src = 'https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.3.2/lazysizes.min.js';
-        document.body.appendChild(script);
-    }
-    
-    // Prefetch de seções importantes
-    if (document.querySelector('.nav-link[data-section="estrategicas"]')) {
-        const link = document.createElement('link');
-        link.rel = 'prefetch';
-        link.href = '#section-estrategicas';
-        document.head.appendChild(link);
-    }
-}
-
-// ============================================
-// 16. HANDLER DE ERROS GLOBAL
-// ============================================
-window.addEventListener('error', function(e) {
-    console.error('[SISCOMIS ERROR]', e.message, e.filename, e.lineno);
-});
-
-window.addEventListener('unhandledrejection', function(e) {
-    console.error('[SISCOMIS PROMISE ERROR]', e.reason);
-});
-
-// ============================================
-// 17. EXPORTAR FUNÇÕES ÚTEIS GLOBALMENTE
-// ============================================
-window.SISCOMIS = {
-    refresh: function() {
-        triggerQuickGlitch();
-        showNotification('SISTEMA ATUALIZADO', 'success');
-    },
-    navigate: function(section) {
-        const link = document.querySelector(`.nav-link[data-section="${section}"]`);
-        if (link) link.click();
-    },
-    notify: showNotification,
-    glitch: triggerQuickGlitch
+        notification.style.animation = 'slideOutRight 0.3s ease forwards';
+        setTimeout(() => notification.remove(), 300);
+    }, 3500);
 };
 
 // ============================================
-// FIM DO SCRIPT
+// 13. HANDLER DE ERROS
 // ============================================
-console.log('%c▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓', 'color: #00ff41;');
-console.log('%c█ SISCOMIS v3.7 - TODOS OS SISTEMAS OPERACIONAIS █', 'color: #00ff41; font-weight: bold;');
-console.log('%c█ PRONTIDÃO CONFIRMADA - DEFESA ATIVA          █', 'color: #00ff41;');
-console.log('%c▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓', 'color: #00ff41;');
+window.addEventListener('error', function(e) {
+    console.error('[GORRO PESADO ERRO]', e.message, 'em', e.filename, 'linha', e.lineno);
+});
+
+window.addEventListener('unhandledrejection', function(e) {
+    console.error('[GORRO PESADO ERRO DE PROMESSA]', e.reason);
+});
+
+// ============================================
+// 14. API GLOBAL
+// ============================================
+window.GORROPESADO = {
+    navigate: function(section) {
+        const tab = document.querySelector(`.muscle-tab[data-target="${section}"]`);
+        if (tab) tab.click();
+    },
+    shake: function(intensity) {
+        window.triggerScreenShake(intensity || 3);
+    },
+    notify: function(message, type) {
+        window.tacticalNotify(message, type || 'info');
+    },
+    flipCard: function(index) {
+        const cards = document.querySelectorAll('.force-card');
+        if (cards[index]) {
+            cards[index].classList.toggle('flipped');
+        }
+    }
+};
+
+// ============================================
+// ANIMAÇÕES CSS INJETADAS DINAMICAMENTE
+// ============================================
+const dynamicStyles = document.createElement('style');
+dynamicStyles.textContent = `
+    @keyframes rippleEffect {
+        0% { width: 0; height: 0; opacity: 1; }
+        100% { width: 200px; height: 200px; opacity: 0; }
+    }
+    
+    @keyframes flipFlash {
+        0% { width: 40px; height: 40px; opacity: 1; border-color: #d4b020; }
+        100% { width: 120px; height: 120px; opacity: 0; border-color: transparent; }
+    }
+    
+    @keyframes slideInRight {
+        from { transform: translateX(100%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+    }
+    
+    @keyframes slideOutRight {
+        from { transform: translateX(0); opacity: 1; }
+        to { transform: translateX(100%); opacity: 0; }
+    }
+`;
+document.head.appendChild(dynamicStyles);
+
+// ============================================
+// LOG DE INICIALIZAÇÃO
+// ============================================
+console.log('%c' + '═'.repeat(50), 'color: #d4b020;');
+console.log('%c GORRO PESADO - SISTEMA OPERACIONAL ', 'color: #d4b020; font-weight: bold; font-size: 18px;');
+console.log('%c FORÇAS DE EMPREGO ESTRATÉGICO ', 'color: #6b8c42; font-weight: bold; font-size: 14px;');
+console.log('%c EXÉRCITO BRASILEIRO - PRONTIDÃO TOTAL ', 'color: #a89880; font-weight: bold;');
+console.log('%c' + '═'.repeat(50), 'color: #d4b020;');
