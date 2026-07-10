@@ -1,263 +1,207 @@
-/**
- * SISTEMA TÁTICO DE INTERATIVIDADE - EXÉRCITO BRASILEIRO (SIMULADO)
- * Desenvolvido em JS Puro (Vanilla) sob a escuta DOMContentLoaded.
- */
-
-document.addEventListener("DOMContentLoaded", () => {
-    
-    // ==========================================================================
-    // BANCO DE DADOS OFICIAIS (Fonte Estrita do Prompt)
-    // ==========================================================================
-    const DB_COMANDOS = {
-        CMA: {
-            nome: "Comando Militar da Amazônia",
-            sigla: "CMA",
-            sede: "Manaus (AM)",
-            abrangencia: "Presença estratégica contínua na faixa de fronteira amazônica."
-        },
-        CMN: {
-            nome: "Comando Militar do Norte",
-            sigla: "CMN",
-            sede: "Belém (PA)",
-            abrangencia: "Operações dedicadas à Defesa da Amazônia Oriental."
-        },
-        CMNE: {
-            nome: "Comando Militar do Nordeste",
-            sigla: "CMNE",
-            sede: "Recife (PE)",
-            abrangencia: "Segurança estratégica regional e apoio a missões de GLO."
-        },
-        CMO: {
-            nome: "Comando Militar do Oeste",
-            sigla: "CMO",
-            sede: "Campo Grande (MS)",
-            abrangencia: "Salvaguarda do Pantanal e defesa perimetral da fronteira oeste."
-        },
-        CMP: {
-            nome: "Comando Militar do Planalto",
-            sigla: "CMP",
-            sede: "Brasília (DF)",
-            abrangencia: "Proteção da capital federal e das áreas territoriais de entorno."
-        },
-        CML: {
-            nome: "Comando Militar do Leste",
-            sigla: "CML",
-            sede: "Rio de Janeiro (RJ)",
-            abrangencia: "Centro de poder e sede operacional das Forças de Emprego Estratégico."
-        },
-        CMSE: {
-            nome: "Comando Militar do Sudeste",
-            sigla: "CMSE",
-            sede: "São Paulo (SP)",
-            abrangencia: "Concentração do maior efetivo e vinculação à estrutura industrial de defesa."
-        },
-        CMS: {
-            nome: "Comando Militar do Sul",
-            sigla: "CMS",
-            sede: "Porto Alegre (RS)",
-            abrangencia: "Defesa da fronteira sul e manutenção da robusta tradição blindada."
-        }
-    };
-
-    // ==========================================================================
-    // FUNCIONALIDADE 1: GERENCIAMENTO E REVELAÇÃO DO MAPA INTERATIVO
-    // ==========================================================================
-    const mapRegions = document.querySelectorAll(".map-region");
-    const mapPanel = document.getElementById("map-panel");
-    const lblComando = document.getElementById("lbl-comando");
-    const lblSigla = document.getElementById("lbl-sigla");
-    const lblSede = document.getElementById("lbl-sede");
-    const lblAbrangencia = document.getElementById("lbl-abrangencia");
-
-    mapRegions.forEach(region => {
-        region.addEventListener("mouseenter", (e) => {
-            const comandoId = e.target.getAttribute("data-comando");
-            const dados = DB_COMANDOS[comandoId];
-            
-            if (dados) {
-                // Ativa o estado holográfico do painel
-                mapPanel.classList.add("active-intel");
-                mapPanel.querySelector(".panel-header").textContent = "INTERCEPÇÃO DE SINAL ADQUIRIDA";
-                
-                // Transmite os dados estruturados para o DOM
-                lblComando.textContent = dados.nome;
-                lblSigla.textContent = dados.sigla;
-                lblSede.textContent = dados.sede;
-                lblAbrangencia.textContent = dados.abrangencia;
-            }
-        });
-
-        region.addEventListener("mouseleave", () => {
-            // Retorna o painel para o estado padrão de escuta ativa
-            mapPanel.classList.remove("active-intel");
-            mapPanel.querySelector(".panel-header").textContent = "AGUARDANDO SELEÇÃO DE VETOR...";
-            
-            lblComando.textContent = "-";
-            lblSigla.textContent = "-";
-            lblSede.textContent = "-";
-            lblAbrangencia.textContent = "-";
-        });
-    });
-
-    // ==========================================================================
-    // FUNCIONALIDADE 2: NAV ABAS COM TRANSICAO SCANLINE & FLICKER
-    // ==========================================================================
-    const tabTriggers = document.querySelectorAll(".tab-trigger");
-    const tabContents = document.querySelectorAll(".tab-content");
-    const tabScanner = document.getElementById("tab-scanner");
-    let isTabTransitioning = false;
-
-    tabTriggers.forEach(trigger => {
-        trigger.addEventListener("click", function() {
-            // Bloqueia cliques simultâneos rápidos para evitar quebra de animação
-            if (isTabTransitioning || this.classList.contains("active")) return;
-            isTabTransitioning = true;
-
-            const targetTabId = this.getAttribute("data-tab");
-
-            // Dispara efeito visual de varredura vertical na caixa das abas
-            tabScanner.classList.add("scan-triggered");
-
-            // Aguarda o meio da varredura para trocar o conteúdo de forma invisível
-            setTimeout(() => {
-                // Remove estados anteriores
-                tabTriggers.forEach(t => {
-                    t.classList.remove("active");
-                    t.setAttribute("aria-selected", "false");
-                });
-                tabContents.forEach(c => c.classList.remove("active"));
-
-                // Ativa a nova seleção
-                this.classList.add("active");
-                this.setAttribute("aria-selected", "true");
-                const activeContent = document.getElementById(targetTabId);
-                activeContent.classList.add("active");
-            }, 200);
-
-            // Finaliza o ciclo de transição removendo a classe do scanner
-            setTimeout(() => {
-                tabScanner.classList.remove("scan-triggered");
-                isTabTransitioning = false;
-            }, 400);
-        });
-    });
-
-    // ==========================================================================
-    // FUNCIONALIDADE 3: LINHA DO TEMPO SCANNER (MONITORAMENTO DE ROLAGEM)
-    // ==========================================================================
-    const timelineItems = document.querySelectorAll(".timeline-item");
-    const timelinePointer = document.getElementById("timeline-pointer");
-    const timelineContainer = document.querySelector(".timeline-container");
-
-    function processTimelineScanner() {
-        if (!timelineContainer) return;
-
-        const containerRect = timelineContainer.getBoundingClientRect();
-        const viewportHeight = window.innerHeight;
-
-        // O ponto de varredura ideal do scanner fica no centro da tela
-        const triggerLine = viewportHeight / 2;
-
-        // Calcula a posição relativa do cursor marcador na linha
-        let pointerOffset = triggerLine - containerRect.top;
-        // Limita o cursor dentro das margens reais do container físico da linha
-        if (pointerOffset < 0) pointerOffset = 0;
-        if (pointerOffset > containerRect.height) pointerOffset = containerRect.height;
-        
-        timelinePointer.style.top = `${pointerOffset}px`;
-
-        // Avalia a colisão do scanner com cada card de instrução
-        timelineItems.forEach(item => {
-            const itemRect = item.getBoundingClientRect();
-            // Ativa o elemento assim que o centro da tela ultrapassar o topo do card
-            if (itemRect.top < triggerLine) {
-                item.classList.add("scanned-active");
-            } else {
-                item.classList.remove("scanned-active");
-            }
-        });
-    }
-
-    // Vincula o processamento ao scroll e ao redimensionamento do painel
-    window.addEventListener("scroll", processTimelineScanner);
-    window.addEventListener("resize", processTimelineScanner);
-    // Executa uma chamada inicial para estabelecer posições vigentes
-    processTimelineScanner();
-
-    // ==========================================================================
-    // FUNCIONALIDADE 4: MONITOR DE DESAFIOS AUTOMÁTICO COM GLITCH
-    // ==========================================================================
-    const challengeCards = document.querySelectorAll("[data-glitch-card='true']");
-    
-    function triggerRandomGlitch() {
-        if (challengeCards.length === 0) return;
-        
-        // Sorteia um índice dos cards disponíveis para sofrer a instabilidade
-        const randomIndex = Math.floor(Math.random() * challengeCards.length);
-        const selectedCard = challengeCards[randomIndex];
-        
-        // Insere a classe de animação de ruído CSS
-        selectedCard.classList.add("glitch-visual-active");
-        
-        // Remove a classe após a conclusão exata da animação
-        setTimeout(() => {
-            selectedCard.classList.remove("glitch-visual-active");
-        }, 260);
-    }
-
-    // Intervalo cíclico rígido de 5 segundos determinado nos requisitos
-    setInterval(triggerRandomGlitch, 5000);
-
-    // ==========================================================================
-    // FUNCIONALIDADE 5: CONSOLE DE STATUS COM TEXTO EM LOOP (DIGITAÇÃO)
-    // ==========================================================================
-    const consoleStrings = [
-        "SISCOMIS: Link Verde estabelecido...",
-        "Bda Inf Pqdt: Prontidão operacional 48h...",
-        "Conexão com CIGS: Estável e operacional...",
-        "COTER: Monitoramento estratégico ativo...",
-        "PPIF: Patrulhamento de fronteira em andamento..."
-    ];
-
-    const consoleOutput = document.getElementById("console-output");
-    let currentStringIndex = 0;
-    let currentCharIndex = 0;
-    let isDeleting = false;
-    let typingSpeed = 60;
-
-    function executionConsoleLoop() {
-        const fullText = consoleStrings[currentStringIndex];
-
-        if (!isDeleting) {
-            // Modo de digitação progressiva
-            consoleOutput.textContent = fullText.substring(0, currentCharIndex + 1);
-            currentCharIndex++;
-
-            if (currentCharIndex === fullText.length) {
-                // Texto completo exibido, aguarda pausa de leitura antes de apagar
-                isDeleting = true;
-                typingSpeed = 3000; // Tempo de permanência do texto em tela
-            } else {
-                typingSpeed = 60; // Velocidade padrão por caractere
-            }
-        } else {
-            // Modo de deleção progressiva
-            consoleOutput.textContent = fullText.substring(0, currentCharIndex - 1);
-            currentCharIndex--;
-
-            if (currentCharIndex === 0) {
-                isDeleting = false;
-                // Avança para o próximo índice do array de transmissão
-                currentStringIndex = (currentStringIndex + 1) % consoleStrings.length;
-                typingSpeed = 400; // Pequena pausa antes de iniciar nova frase
-            } else {
-                typingSpeed = 30; // Velocidade acelerada para apagar texto
-            }
-        }
-
-        setTimeout(executionConsoleLoop, typingSpeed);
-    }
-
-    // Inicializa o laço as síncrono do terminal
-    setTimeout(executionConsoleLoop, 1000);
+document.addEventListener('DOMContentLoaded', () => {
+  initClock();
+  initMap();
+  initTabs();
+  initTimeline();
+  initGallery();
+  initGlitch();
+  initConsole();
 });
+
+/* ========== RELÓGIO ========== */
+function initClock() {
+  const clock = document.getElementById('live-clock');
+  function update() {
+    const now = new Date();
+    clock.textContent = now.toLocaleTimeString('pt-BR', { hour12: false });
+    requestAnimationFrame(() => setTimeout(update, 1000));
+  }
+  update();
+}
+
+/* ========== MAPA INTERATIVO ========== */
+function initMap() {
+  const zones = document.querySelectorAll('.map-zone, .map-dot');
+  const holoBody = document.getElementById('holo-body');
+  const holoCoords = document.getElementById('holo-coords');
+  const listButtons = document.querySelectorAll('.quick-command-list button');
+
+  const data = {
+    CMN:  { sigla:'CMN',  nome:'Comando Militar do Norte',     sede:'Belém (PA)',        abrang:'Defesa da Amazônia Oriental' },
+    CMA:  { sigla:'CMA',  nome:'Comando Militar da Amazônia',  sede:'Manaus (AM)',       abrang:'Faixa de fronteira amazônica' },
+    CMNE: { sigla:'CMNE', nome:'Comando Militar do Nordeste',  sede:'Recife (PE)',       abrang:'Segurança regional e apoio a GLO' },
+    CMP:  { sigla:'CMP',  nome:'Comando Militar do Planalto',  sede:'Brasília (DF)',     abrang:'Proteção da capital e entorno' },
+    CML:  { sigla:'CML',  nome:'Comando Militar do Leste',     sede:'Rio de Janeiro (RJ)', abrang:'Centro de poder e F Emp Estrtg' },
+    CMSE: { sigla:'CMSE', nome:'Comando Militar do Sudeste',   sede:'São Paulo (SP)',    abrang:'Maior efetivo e estrutura industrial' },
+    CMS:  { sigla:'CMS',  nome:'Comando Militar do Sul',       sede:'Porto Alegre (RS)', abrang:'Fronteira sul e tradição blindada' },
+    CMO:  { sigla:'CMO',  nome:'Comando Militar do Oeste',     sede:'Campo Grande (MS)', abrang:'Pantanal e defesa da fronteira oeste' }
+  };
+
+  function showInfo(comando) {
+    const d = data[comando];
+    if (!d) return;
+    holoBody.innerHTML = `<p><strong>${d.sigla}</strong> · ${d.nome}</p><p>Sede: ${d.sede}</p><p>${d.abrang}</p>`;
+    holoCoords.textContent = `COORD: ${comando}`;
+    listButtons.forEach(btn => {
+      btn.classList.remove('active');
+      if (btn.dataset.comando === comando) btn.classList.add('active');
+    });
+  }
+
+  zones.forEach(el => {
+    el.addEventListener('mouseenter', () => showInfo(el.dataset.comando));
+  });
+
+  listButtons.forEach(btn => {
+    btn.addEventListener('click', () => showInfo(btn.dataset.comando));
+  });
+}
+
+/* ========== TABS ========== */
+function initTabs() {
+  const buttons = document.querySelectorAll('.tab-btn');
+  const panels = document.querySelectorAll('.tab-panel');
+  const highlighter = document.getElementById('tab-highlighter');
+
+  function moveHighlighter(btn) {
+    highlighter.style.left = btn.offsetLeft + 'px';
+    highlighter.style.width = btn.offsetWidth + 'px';
+  }
+
+  const activeBtn = document.querySelector('.tab-btn.active');
+  if (activeBtn) moveHighlighter(activeBtn);
+
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (btn.classList.contains('active')) return;
+      buttons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      moveHighlighter(btn);
+      const targetId = 'panel-' + btn.dataset.tab;
+      panels.forEach(p => {
+        p.classList.remove('active');
+        if (p.id === targetId) p.classList.add('active');
+      });
+    });
+  });
+
+  window.addEventListener('resize', () => {
+    const current = document.querySelector('.tab-btn.active');
+    if (current) moveHighlighter(current);
+  });
+}
+
+/* ========== LINHA DO TEMPO ========== */
+function initTimeline() {
+  const items = document.querySelectorAll('.timeline-entry[data-animate]');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.3 });
+  items.forEach(item => observer.observe(item));
+}
+
+/* ========== GALERIA COM IMAGENS REAIS ========== */
+function initGallery() {
+  const grid = document.getElementById('gallery-grid');
+  const overlay = document.getElementById('lightbox-overlay');
+  const imgEl = document.getElementById('lightbox-img');
+  const caption = document.getElementById('lightbox-caption');
+  const closeBtn = document.getElementById('lightbox-close');
+
+  // Imagens reais de domínio público ou divulgação oficial do Exército Brasileiro
+  const images = [
+    {
+      src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Exercito_brasileiro_paraquedista.jpg/640px-Exercito_brasileiro_paraquedista.jpg',
+      caption: 'Paraquedistas do Exército Brasileiro'
+    },
+    {
+      src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Brazilian_Army_Aviation_Command_Helicopter.jpg/640px-Brazilian_Army_Aviation_Command_Helicopter.jpg',
+      caption: 'Helicóptero do Comando de Aviação do Exército'
+    },
+    {
+      src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Brazilian_special_forces_operators.jpg/640px-Brazilian_special_forces_operators.jpg',
+      caption: 'Operadores das Forças Especiais do Exército'
+    },
+    {
+      src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/MINUSTAH_Brazilian_troops.jpg/640px-MINUSTAH_Brazilian_troops.jpg',
+      caption: 'Tropas brasileiras na MINUSTAH (Haiti)'
+    }
+  ];
+
+  images.forEach(img => {
+    const div = document.createElement('div');
+    div.className = 'gallery-item';
+    div.innerHTML = `<img src="${img.src}" alt="${img.caption}" loading="lazy" />`;
+    div.addEventListener('click', () => {
+      imgEl.src = img.src;
+      caption.textContent = img.caption;
+      overlay.classList.add('active');
+    });
+    grid.appendChild(div);
+  });
+
+  closeBtn.addEventListener('click', () => overlay.classList.remove('active'));
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) overlay.classList.remove('active');
+  });
+}
+
+/* ========== GLITCH AUTOMÁTICO ========== */
+function initGlitch() {
+  const cards = document.querySelectorAll('.glitch-card[data-glitch]');
+  if (cards.length === 0) return;
+
+  setInterval(() => {
+    const randomCard = cards[Math.floor(Math.random() * cards.length)];
+    randomCard.classList.add('glitch-active');
+    setTimeout(() => {
+      randomCard.classList.remove('glitch-active');
+    }, 350);
+  }, 5000);
+}
+
+/* ========== CONSOLE TÁTICO AO VIVO ========== */
+function initConsole() {
+  const output = document.getElementById('console-output');
+  const messages = [
+    '> SISCOMIS: Link Verde...',
+    '> Bda Inf Pqdt: Prontidão 48h',
+    '> Conexão com CIGS: Estável',
+    '> CAvEx: Pronto para missão',
+    '> C Op Esp: Canal seguro ativo',
+    '> PPIF: Varredura de fronteira ok'
+  ];
+
+  let msgIndex = 0;
+  let charIndex = 0;
+  let currentText = '';
+
+  function typeWriter() {
+    if (charIndex < messages[msgIndex].length) {
+      currentText += messages[msgIndex].charAt(charIndex);
+      output.textContent = currentText;
+      charIndex++;
+      setTimeout(typeWriter, 50);
+    } else {
+      setTimeout(eraseText, 2000);
+    }
+  }
+
+  function eraseText() {
+    if (currentText.length > 0) {
+      currentText = currentText.slice(0, -1);
+      output.textContent = currentText;
+      setTimeout(eraseText, 20);
+    } else {
+      msgIndex = (msgIndex + 1) % messages.length;
+      charIndex = 0;
+      setTimeout(typeWriter, 300);
+    }
+  }
+
+  typeWriter();
+}
